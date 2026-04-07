@@ -378,7 +378,7 @@
                   <button class="ghost" id="btnExportJson">Xuất JSON</button>
                 </div>
                 <div id="detailInfoGrid" class="compact-list"></div>
-                <div class="footer-note">Điều khiển bot đã khóa ở client và function. Xóa bot sẽ thêm vào ignoredBots để EA gửi lại cũng không tự tạo lại.</div>
+                <div class="footer-note">Điều khiển bot khóa bằng PIN admin. Xóa bot sẽ đi qua Railway API, xóa khỏi danh sách hiển thị và thêm ignoredBots để EA không tự tạo lại.</div>
               </div>
             </div>
           </div>
@@ -1185,24 +1185,33 @@
     async function deleteBot() {
       const bot = selectedBot();
       if (!bot) return showToast('Chưa chọn bot.', 'warn');
-      if (!state.adminUnlocked) return showToast('Chưa mở khóa admin.', 'warn');
+      if (!state.adminUnlocked || !state.panelToken) return showToast('Chưa mở khóa admin.', 'warn');
       const ok = await showConfirm({
         title: 'Xóa bot',
-        text: `Xóa bot ${bot.alias || bot.bot} khỏi Firebase và thêm vào ignoredBots?`,
+        text: `Xóa bot ${bot.alias || bot.bot} khỏi danh sách công khai? Bot sẽ bị ẩn và không tự hiện lại nếu EA gửi tiếp với cùng botKey.`,
         confirmText: 'Xóa bot',
         cancelText: 'Hủy',
         danger: true
       });
       if (!ok) return;
-      await Promise.all([
-        remove(ref(db, `bots/${bot.botKey}`)),
-        remove(ref(db, `commands/${bot.botKey}`)),
-        remove(ref(db, `manual/${bot.botKey}`)),
-        set(ref(db, `ignoredBots/${bot.botKey}`), true)
-      ]);
-      state.selectedBotKey = '';
-      persistSelectedBot();
-      showToast('Đã xóa bot.', 'success');
+      try {
+        const res = await fetch('/panel/delete-bot', {
+          method: 'POST',
+          headers: { 'content-type': 'application/json' },
+          body: JSON.stringify({
+            token: state.panelToken,
+            botKey: bot.botKey,
+            note: `Deleted by admin from web UI at ${new Date().toISOString()}`,
+          }),
+        });
+        const json = await res.json().catch(() => ({}));
+        if (!res.ok || !json.ok) throw new Error(json.error || `HTTP ${res.status}`);
+        state.selectedBotKey = '';
+        persistSelectedBot();
+        showToast('Đã xóa bot khỏi danh sách hiển thị.', 'success');
+      } catch (err) {
+        showToast(`Xóa bot thất bại: ${err.message || err}`, 'error');
+      }
     }
     async function exportBotJson() {
       const bot = selectedBot();

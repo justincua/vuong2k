@@ -127,6 +127,57 @@ app.all('/panel/cmd', async (req, res) => {
   }
 });
 
+
+app.post('/panel/delete-bot', async (req, res) => {
+  try {
+    const body = req.body || {};
+    const token = cleanStr(body.token || req.query.token);
+    if (token !== PANEL_TOKEN) return fail(res, 401, 'UNAUTHORIZED');
+
+    const botKey = cleanStr(body.botKey || req.query.botKey);
+    if (!botKey) return fail(res, 400, 'MISSING_BOTKEY');
+
+    const botSnap = await db().ref(`bots/${botKey}`).get();
+    const botPayload = botSnap.exists() ? (botSnap.val() || {}) : {};
+    const meta = botPayload.meta || {};
+    const live = botPayload.live || {};
+    const accountId = cleanStr(meta.id || live.id);
+    const botName = cleanStr(meta.bot || live.bot);
+
+    const updates = {};
+    updates[`bots/${botKey}`] = null;
+    updates[`commands/${botKey}`] = null;
+    updates[`manual/${botKey}`] = null;
+    updates[`lastHeartbeat/${botKey}`] = null;
+    if (accountId) updates[`indexes/byAccount/${accountId}/${botKey}`] = null;
+    if (botName) updates[`indexes/byBotName/${botName}/${botKey}`] = null;
+    updates[`ignoredBots/${botKey}`] = {
+      hidden: true,
+      deleted: true,
+      deletedAt: nowIso(),
+      note: cleanStr(body.note || 'Deleted from admin panel'),
+      botKey,
+      id: accountId,
+      bot: botName,
+      symbol: cleanStr(meta.symbol || live.symbol),
+      name: cleanStr(meta.name || live.name),
+    };
+
+    await db().ref().update(updates);
+
+    return ok(res, {
+      ok: true,
+      botKey,
+      removed: true,
+      ignored: true,
+      server_time: nowIso(),
+    });
+  } catch (error) {
+    console.error('/panel/delete-bot error', error);
+    return fail(res, 500, 'SERVER_ERROR', error.message || 'Unknown error');
+  }
+});
+
 app.get('/ea/next', async (req, res) => {
   try {
     if (cleanStr(req.query.ea_token) !== EA_TOKEN) return fail(res, 401, 'UNAUTHORIZED');

@@ -9,6 +9,7 @@ Mục tiêu bản này:
   /ea/ack
   /panel/summary
   /panel/cmd
+  /panel/delete-bot
 - Thêm lịch tháng lưu dạng JSON động:
   /calendar/lich_thang_YYYY_MM.json
 
@@ -37,3 +38,9 @@ Ghi chú lịch tháng:
 - Đồng thời server sẽ mirror ra file cache cục bộ nếu Railway còn instance hiện tại.
 - Frontend ưu tiên ngày cũ từ lịch tháng JSON, còn ngày hiện tại vẫn lấy realtime từ bot.
 - Khi bot gửi heartbeat, snapshot ngày hiện tại sẽ tự được cập nhật vào lịch tháng.
+
+
+Admin xóa bot:
+- Trong tab Cài đặt admin, chọn bot rồi bấm "Xóa bot".
+- Web sẽ gọi Railway API /panel/delete-bot thay vì xóa trực tiếp từ client.
+- Server sẽ xóa bots/commands/manual/lastHeartbeat/index tương ứng và thêm botKey vào ignoredBots để bot không tự hiện lại.
