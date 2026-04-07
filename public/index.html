@@ -1,0 +1,1325 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+  <title>JUSTINCUA BOT</title>
+  <style>
+    :root{
+      --bg:#050c18;
+      --bg2:#071225;
+      --panel:#0d1b34;
+      --panel2:#112446;
+      --line:rgba(255,255,255,.08);
+      --line2:rgba(96,149,255,.34);
+      --text:#eef5ff;
+      --muted:#86a1c7;
+      --good:#28df78;
+      --bad:#ff5d8b;
+      --warn:#ffc65c;
+      --blue:#4e8fff;
+      --shadow:0 20px 48px rgba(0,0,0,.36);
+      --safe-top:env(safe-area-inset-top);
+      --safe-bottom:env(safe-area-inset-bottom);
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;height:100%;overflow:hidden;background:
+      radial-gradient(circle at top center, rgba(78,143,255,.16), transparent 34%),
+      radial-gradient(circle at bottom left, rgba(40,223,120,.08), transparent 24%),
+      linear-gradient(180deg,#040915,#071120 42%,#040b17 100%);
+      color:var(--text);font-family:Inter,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
+    body{padding:var(--safe-top) 8px var(--safe-bottom)}
+    .phone{width:min(430px,100%);height:calc(100dvh - var(--safe-top) - var(--safe-bottom));margin:0 auto;background:
+      linear-gradient(180deg,rgba(10,18,35,.98),rgba(5,12,24,.99));
+      border:1px solid rgba(255,255,255,.08);border-radius:34px;box-shadow:var(--shadow);overflow:hidden;position:relative}
+    .phone:before{content:"";position:absolute;inset:0;pointer-events:none;
+      background:radial-gradient(circle at 88% 20%, rgba(78,143,255,.14), transparent 20%),
+      linear-gradient(180deg, rgba(255,255,255,.02), transparent 22%)}
+    .shell{position:relative;z-index:1;height:100%;display:grid;grid-template-rows:auto 1fr auto;gap:10px;padding:12px 12px calc(10px + var(--safe-bottom))}
+    .topbar{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center;padding:4px 2px 0}
+    .brand h1{margin:0;font-size:17px;font-weight:900;letter-spacing:.03em;text-transform:uppercase}
+    .brand p{margin:5px 0 0;font-size:11px;color:var(--muted)}
+    .top-actions{display:flex;gap:8px}
+    .icon-btn{width:42px;height:42px;border-radius:16px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--text);display:grid;place-items:center;font-size:17px;cursor:pointer}
+    .live-pill{display:flex;align-items:center;gap:9px;padding:11px 14px;border-radius:999px;background:rgba(255,255,255,.05);border:1px solid var(--line);font-size:12px;font-weight:800;min-width:0}
+    .dot{width:9px;height:9px;border-radius:50%;background:var(--warn);box-shadow:0 0 12px currentColor;flex:0 0 auto}
+    .dot.live{background:var(--good)}
+    .dot.dead{background:var(--bad)}
+    .viewport{min-height:0;position:relative;overflow:hidden}
+    .page{display:none;height:100%;min-height:0;overflow:hidden}
+    .page.active{display:grid;grid-auto-rows:max-content;align-content:start;gap:12px;height:100%;overflow:auto;padding-right:2px;scrollbar-width:none;padding-bottom:4px}
+    .page.active::-webkit-scrollbar{display:none}
+    .panel{background:linear-gradient(180deg,rgba(16,31,59,.96),rgba(8,18,35,.96));border:1px solid var(--line);border-radius:24px;padding:12px;box-shadow:inset 0 1px 0 rgba(255,255,255,.03);min-height:0;overflow:visible}
+    .panel.compact{padding:10px}
+    .section-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .section-title{margin:0;font-size:13px;font-weight:900;letter-spacing:.025em;text-transform:uppercase}
+    .subtle{font-size:11px;color:var(--muted)}
+    .pill{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-height:32px;padding:7px 11px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.04);font-size:11px;white-space:nowrap;color:var(--text)}
+    .pill.primary{background:linear-gradient(135deg,rgba(62,114,255,.22),rgba(31,74,175,.2));border-color:rgba(78,143,255,.4)}
+    .selected-card{display:grid;grid-template-rows:auto auto auto;gap:10px;min-height:0}
+    .row-between{display:flex;align-items:center;justify-content:space-between;gap:10px}
+    .bot-title{font-size:25px;font-weight:900;letter-spacing:-.04em;line-height:1}
+    .meta{font-size:11px;color:var(--muted);line-height:1.35}
+    .split2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .split4{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .metric{padding:11px 12px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);min-height:72px}
+    .metric .label{font-size:11px;color:var(--muted)}
+    .metric .value{margin-top:6px;font-size:18px;font-weight:900;line-height:1.05}
+    .metric .mini{margin-top:5px;font-size:11px;color:var(--muted)}
+    .good{color:var(--good)} .bad{color:var(--bad)} .warn{color:var(--warn)} .muted{color:var(--muted)}
+    .stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .stat-card{padding:12px;border-radius:18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06);min-height:78px}
+    .stat-card .label{font-size:11px;color:var(--muted)}
+    .stat-card .value{margin-top:8px;font-size:16px;font-weight:900}
+    .home-bot-list{display:grid;grid-template-columns:1fr;gap:10px;min-height:0;height:auto;overflow:visible;align-content:start;padding-right:0;scrollbar-width:none}
+    .home-bot-list::-webkit-scrollbar,.list-area::-webkit-scrollbar,.settings-scroll::-webkit-scrollbar{display:none}
+    .mini-bot{padding:12px;border-radius:20px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(18,31,57,.96),rgba(11,20,38,.96));cursor:pointer;min-width:0;align-self:start}
+    .mini-bot.active{border-color:rgba(78,143,255,.64);box-shadow:inset 0 0 0 1px rgba(78,143,255,.14)}
+    .mini-bot .name{font-size:14px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .mini-bot .meta{margin-top:3px}
+    .mini-bot .mini-stats{display:flex;justify-content:space-between;gap:8px;margin-top:10px;font-size:12px}
+    .mini-bot .mini-stats div{min-width:0}
+    .mini-bot .mini-stats strong{display:block;margin-top:3px;font-size:15px;line-height:1.05}
+    .mini-bot .tag{font-size:10px;color:var(--muted)}
+    .page-home,.page-profit,.page-bots,.page-settings{grid-template-rows:none}
+    .list-area,.settings-scroll{min-height:0;overflow:visible}
+    .search-row{display:grid;grid-template-columns:minmax(0,1fr) 110px 110px;gap:8px}
+    input,select,textarea,button{width:100%;border-radius:18px;border:1px solid rgba(255,255,255,.08);background:rgba(255,255,255,.05);color:var(--text);padding:12px 13px;font-size:13px;outline:none}
+    input::placeholder,textarea::placeholder{color:#7991b7}
+    select{appearance:none}
+    textarea{min-height:104px;resize:vertical}
+    button{font-weight:800;cursor:pointer}
+    button.primary{background:linear-gradient(135deg,#317cff,#1a57ff)}
+    button.goodbtn{background:linear-gradient(135deg,#1cbf66,#17a458)}
+    button.warnbtn{background:linear-gradient(135deg,#ffbb4a,#e59200)}
+    button.danger{background:linear-gradient(135deg,#ff4d7b,#dc215d)}
+    button.ghost{background:rgba(255,255,255,.05)}
+    .bot-list{display:grid;gap:10px}
+    .bot-row{padding:13px 14px;border-radius:22px;border:1px solid rgba(255,255,255,.07);background:linear-gradient(180deg,rgba(17,29,52,.96),rgba(10,19,35,.96));display:grid;grid-template-columns:1fr auto;gap:12px;cursor:pointer}
+    .bot-row.active{border-color:rgba(78,143,255,.62)}
+    .bot-row .name{font-size:14px;font-weight:800}
+    .bot-row .line2{margin-top:8px;display:flex;gap:14px;flex-wrap:wrap;font-size:12px}
+    .empty{display:grid;place-items:center;height:100%;border:1px dashed rgba(255,255,255,.13);border-radius:20px;color:var(--muted);background:rgba(255,255,255,.02);padding:14px;text-align:center}
+    .detail-top{display:grid;grid-template-columns:1fr auto;gap:10px;align-items:center}
+    .detail-head .name{font-size:18px;font-weight:900}
+    .detail-head .meta{margin-top:3px}
+    .inline-actions{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+    .inline-actions.two{grid-template-columns:repeat(2,1fr)}
+    .compact-list{display:grid;gap:8px}
+    .small-card{padding:10px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+    .small-card .label{font-size:10px;color:var(--muted)}
+    .small-card .value{margin-top:6px;font-size:13px;font-weight:800}
+    .calendar-head,.calendar-body{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+    .calendar-head div{height:24px;border-radius:10px;display:grid;place-items:center;font-size:10px;color:var(--muted)}
+    .calendar-body{align-content:start}
+    .calendar-summary{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .day{min-height:74px;border-radius:18px;border:1px solid rgba(255,255,255,.06);background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));padding:8px 7px;display:grid;grid-template-rows:auto 1fr auto}
+    .day.emptyday{background:transparent;border-color:transparent}
+    .day.today{border-color:rgba(78,143,255,.7);box-shadow:inset 0 0 0 1px rgba(78,143,255,.12)}
+    .day .top{display:flex;justify-content:space-between;align-items:center}
+    .day .n{font-size:12px;font-weight:800}
+    .day .p{font-size:13px;font-weight:900;line-height:1.05;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .day .pct{font-size:10px;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .calendar-panel{display:grid;grid-template-rows:auto auto 24px auto;gap:10px;min-height:0}
+    .month-nav{display:flex;align-items:center;gap:8px}
+    .month-nav .pill{height:30px;min-height:30px;padding:0 11px}
+    .admin-lock{padding:12px;border-radius:18px;border:1px dashed rgba(255,255,255,.14);color:var(--muted);text-align:center;background:rgba(255,255,255,.02)}
+    .settings-scroll{padding-right:2px}
+    .bottom-nav{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;padding:8px;border-radius:24px;border:1px solid rgba(255,255,255,.08);background:rgba(8,16,31,.96);box-shadow:0 18px 36px rgba(0,0,0,.32)}
+    .nav-btn{border:none;border-radius:18px;background:transparent;color:#b6c9e7;min-height:60px;display:grid;place-items:center;gap:4px;padding:6px 4px;font-size:10px}
+    .nav-btn.active{background:linear-gradient(180deg,rgba(46,88,175,.62),rgba(25,52,109,.96));color:#fff}
+    .nav-icon{font-size:18px;line-height:1}
+    .hide{display:none!important}
+    .mono{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+    .footer-note{font-size:11px;color:var(--muted);line-height:1.35}
+
+    .hero-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .top-list{display:grid;gap:8px}
+    .top-item{display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;padding:10px 12px;border-radius:18px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.06)}
+    .top-rank{width:30px;height:30px;border-radius:12px;display:grid;place-items:center;font-size:12px;font-weight:900;background:rgba(78,143,255,.14);border:1px solid rgba(78,143,255,.26)}
+    .top-rank.rank-1{background:rgba(255,198,92,.14);border-color:rgba(255,198,92,.34)}
+    .top-rank.rank-2{background:rgba(180,197,220,.12);border-color:rgba(180,197,220,.28)}
+    .top-rank.rank-3{background:rgba(192,120,76,.12);border-color:rgba(192,120,76,.28)}
+    .top-main{min-width:0}
+    .top-main .name{font-size:13px;font-weight:800;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .top-main .meta{margin-top:2px}
+    .top-profit{font-size:14px;font-weight:900;text-align:right}
+    .toast-stack{position:fixed;right:14px;bottom:calc(92px + var(--safe-bottom));z-index:90;display:grid;gap:8px;max-width:min(360px,calc(100vw - 28px));pointer-events:none}
+    .toast{pointer-events:auto;display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:18px;border:1px solid rgba(255,255,255,.09);background:linear-gradient(180deg,rgba(17,29,52,.98),rgba(9,18,35,.98));box-shadow:0 16px 36px rgba(0,0,0,.3);transform:translateY(12px);opacity:0;animation:toastIn .22s ease forwards}
+    .toast.fade-out{animation:toastOut .18s ease forwards}
+    .toast-dot{width:10px;height:10px;border-radius:50%;margin-top:4px;flex:0 0 auto;box-shadow:0 0 12px currentColor}
+    .toast.info .toast-dot{color:var(--blue);background:var(--blue)}
+    .toast.success .toast-dot{color:var(--good);background:var(--good)}
+    .toast.warn .toast-dot{color:var(--warn);background:var(--warn)}
+    .toast.error .toast-dot{color:var(--bad);background:var(--bad)}
+    .toast strong{display:block;font-size:13px;line-height:1.1}
+    .toast span{display:block;margin-top:3px;font-size:11px;color:var(--muted);line-height:1.35}
+    @keyframes toastIn{to{transform:translateY(0);opacity:1}}
+    @keyframes toastOut{to{transform:translateY(10px);opacity:0}}
+    .modal-overlay{position:fixed;inset:0;z-index:95;background:rgba(2,7,16,.64);backdrop-filter:blur(10px);display:grid;place-items:end center;padding:18px 12px calc(18px + var(--safe-bottom))}
+    .modal-card{width:min(430px,100%);max-height:min(82vh,760px);overflow:auto;border-radius:28px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(16,31,59,.98),rgba(8,18,35,.98));box-shadow:0 24px 52px rgba(0,0,0,.4);padding:14px}
+    .modal-head{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:10px}
+    .modal-title{margin:0;font-size:15px;font-weight:900;letter-spacing:.01em}
+    .modal-close{width:38px;height:38px;border-radius:14px;padding:0}
+    .modal-body{display:grid;gap:10px}
+    .modal-text{font-size:13px;color:#d7e6ff;line-height:1.5}
+    .modal-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:8px;margin-top:12px}
+    .modal-kpis{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+    .modal-metric{padding:11px 12px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
+    .modal-metric .label{font-size:11px;color:var(--muted)}
+    .modal-metric .value{margin-top:6px;font-size:16px;font-weight:900}
+    .modal-list{display:grid;gap:8px}
+    .modal-note{font-size:11px;color:var(--muted);line-height:1.4}
+    .clickable-day{cursor:pointer}
+    .sync-note{display:block;margin-top:2px;color:#7390bc}
+
+    @media (max-width:420px){
+      .shell{gap:9px;padding:10px 10px calc(8px + var(--safe-bottom))}
+      .page-home,.page-profit,.page-bots,.page-settings{gap:9px}
+      .panel.compact{padding:10px}
+      .section-head{gap:8px}
+      .split2,.split4,.stat-grid,.inline-actions,.inline-actions.two{gap:8px}
+      .metric{min-height:76px;padding:11px 12px}
+      .stat-card{min-height:82px;padding:12px}
+      .bot-title{font-size:27px}
+      .home-bot-list{grid-template-columns:1fr}
+      .day{min-height:72px;border-radius:16px}
+      .search-row{grid-template-columns:minmax(0,1fr) 108px 92px}
+      .bottom-nav{padding:7px;gap:7px}
+      .nav-btn{min-height:56px}
+    }
+
+    @media (max-width:380px){
+      .search-row{grid-template-columns:1fr 1fr;grid-template-areas:'search search' 'sort filter'}
+      .search-row > :nth-child(1){grid-area:search}
+      .search-row > :nth-child(2){grid-area:sort}
+      .search-row > :nth-child(3){grid-area:filter}
+      .row-between,.detail-top,.section-head{flex-wrap:wrap}
+      .split2,.split4,.stat-grid{grid-template-columns:1fr 1fr}
+      .home-bot-list{grid-template-columns:1fr}
+      .day{min-height:66px;padding:7px 6px}
+    }
+  </style>
+</head>
+<body>
+  <div class="phone">
+    <div class="shell">
+      <header class="topbar">
+        <div class="brand">
+          <h1>JUSTINCUA BOT</h1>
+          <p id="globalSubtitle">Realtime 0/0 bot · Đang kết nối...</p>
+        </div>
+        <div class="top-actions">
+          <button class="icon-btn" id="btnRefresh" aria-label="Làm mới">↻</button>
+          <button class="icon-btn" id="btnAdminToggle" aria-label="Admin">⚙</button>
+        </div>
+      </header>
+
+      <main class="viewport">
+        <section id="page-home" class="page page-home active">
+          <div class="panel compact">
+            <div class="section-head" style="margin-bottom:8px">
+              <h2 class="section-title">Bot đang chọn</h2>
+              <div class="pill primary" id="currentBotBadge">Chưa chọn</div>
+            </div>
+            <div id="selectedHero" class="selected-card">
+              <div class="empty">Chưa có bot nào để hiển thị.</div>
+            </div>
+          </div>
+
+          <div class="panel compact">
+            <div class="section-head" style="margin-bottom:8px">
+              <h2 class="section-title">Tổng quan tháng</h2>
+              <div class="subtle" id="homeMonthLabel">--</div>
+            </div>
+            <div id="topStats" class="stat-grid"></div>
+          </div>
+
+          <div class="panel compact">
+            <div class="section-head" style="margin-bottom:8px">
+              <h2 class="section-title">Top bot</h2>
+              <div class="subtle">Lãi thực cao nhất</div>
+            </div>
+            <div id="topLeaders" class="top-list"></div>
+          </div>
+
+          <div class="panel compact" style="display:grid;grid-template-rows:auto 1fr;min-height:0">
+            <div class="section-head" style="margin-bottom:8px">
+              <h2 class="section-title">Danh sách bot</h2>
+              <div class="subtle" id="filterSummary">Tất cả bot</div>
+            </div>
+            <div id="homeBotList" class="home-bot-list"></div>
+          </div>
+        </section>
+
+        <section id="page-profit" class="page page-profit">
+          <div class="panel compact">
+            <div class="section-head" style="margin-bottom:8px">
+              <h2 class="section-title">Hiệu suất bot</h2>
+              <div class="pill primary" id="monthLabel">-</div>
+            </div>
+            <div id="profitOverview" class="stat-grid"></div>
+          </div>
+
+          <div class="panel compact calendar-panel">
+            <div class="section-head" style="margin-bottom:0">
+              <h2 class="section-title">Lịch lãi lỗ</h2>
+              <div class="month-nav">
+                <button class="pill" id="btnPrevMonth">←</button>
+                <button class="pill" id="btnToday">Hôm nay</button>
+                <button class="pill" id="btnNextMonth">→</button>
+              </div>
+            </div>
+            <div id="profitMonthSummary" class="calendar-summary"></div>
+            <div class="calendar-head" id="calendarHead"></div>
+            <div class="calendar-body" id="calendarBody"></div>
+          </div>
+        </section>
+
+        <section id="page-bots" class="page page-bots">
+          <div class="panel compact">
+            <div class="search-row">
+              <input id="searchInput" placeholder="Tìm bot / ID / symbol..." />
+              <select id="sortSelect">
+                <option value="fixed">Giữ thứ tự</option>
+                <option value="profit">Lãi thực</option>
+                <option value="day">Lãi ngày</option>
+                <option value="name">Tên bot</option>
+              </select>
+              <select id="filterSelect">
+                <option value="all">Tất cả</option>
+                <option value="live">Online</option>
+                <option value="paused">Paused</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="panel compact" id="detailPanel">
+            <div id="detailEmpty" class="empty">Chọn bot để xem chi tiết nhanh.</div>
+            <div id="detailContent" class="hide" style="display:grid;gap:8px">
+              <div class="detail-top">
+                <div class="detail-head">
+                  <div class="name" id="detailBotTitle">-</div>
+                  <div class="meta" id="detailBotMeta">-</div>
+                </div>
+                <div class="pill"><span id="detailStateDot" class="dot"></span><span id="detailStateText">-</span></div>
+              </div>
+              <div id="detailKpis" class="split2"></div>
+              <div id="detailMini" class="split4"></div>
+              <div id="controlCard" style="display:grid;gap:8px">
+                <div class="section-head" style="margin-bottom:0">
+                  <h2 class="section-title">Điều khiển bot</h2>
+                  <div class="pill" id="adminStatePill">Chỉ admin</div>
+                </div>
+                <div id="controlLocked" class="admin-lock">Chỉ admin đã mở khóa mới dùng được các nút điều khiển bot.</div>
+                <div id="controlActions" class="hide">
+                  <div class="inline-actions">
+                    <button class="danger" data-cmd="close_all">Đóng hết</button>
+                    <button class="warnbtn" data-cmd="close_buy">Đóng BUY</button>
+                    <button class="warnbtn" data-cmd="close_sell">Đóng SELL</button>
+                  </div>
+                  <div class="inline-actions two">
+                    <button class="ghost" data-cmd="time_on">Bật giờ</button>
+                    <button class="ghost" data-cmd="time_off">24/7</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="panel compact list-area">
+            <div class="section-head" style="margin-bottom:8px">
+              <h2 class="section-title">Danh sách bot</h2>
+              <div class="subtle"><span id="botCount">0</span> bot</div>
+            </div>
+            <div id="botList" class="bot-list"></div>
+            <div id="botCountBottom" class="hide">0</div>
+          </div>
+        </section>
+
+        <section id="page-settings" class="page page-settings">
+          <div class="panel compact">
+            <div class="section-head" style="margin-bottom:0">
+              <h2 class="section-title">Cài đặt admin</h2>
+              <div class="subtle">Chỉ admin</div>
+            </div>
+          </div>
+
+          <div class="panel compact settings-scroll">
+            <div id="adminPanel" style="display:grid;gap:10px">
+              <div class="inline-actions two">
+                <input id="adminPin" type="password" placeholder="Nhập PIN admin" />
+                <button class="primary" id="btnUnlock">Mở khóa</button>
+              </div>
+              <button class="ghost" id="btnLock">Khóa lại</button>
+              <div id="adminContent" class="hide" style="display:grid;gap:10px">
+                <div class="section-head" style="margin-bottom:0">
+                  <h2 class="section-title">Override bot đang chọn</h2>
+                  <div class="pill primary" id="settingsSelectedBot">-</div>
+                </div>
+                <input id="editAlias" placeholder="Alias hiển thị (tuỳ chọn)" />
+                <input id="editNote" placeholder="Ghi chú admin (tuỳ chọn)" />
+                <div class="split2">
+                  <input id="editStartBalance" type="number" step="0.01" placeholder="Vốn đầu ngày" />
+                  <input id="editDayTotal" type="number" step="0.01" placeholder="Tổng ngày" />
+                </div>
+                <div class="split2">
+                  <input id="editRealProfit" type="number" step="0.01" placeholder="Lãi thực" />
+                  <input id="editRealPct" type="number" step="0.01" placeholder="% lãi thực" />
+                </div>
+                <textarea id="editAction" placeholder="Override action / ghi chú hiển thị"></textarea>
+                <div class="inline-actions two">
+                  <button class="primary" id="btnSaveOverride">Lưu override</button>
+                  <button class="ghost" id="btnClearOverride">Xóa override</button>
+                </div>
+                <div class="inline-actions">
+                  <button class="warnbtn" id="btnHideBot">Ẩn bot</button>
+                  <button class="danger" id="btnDeleteBot">Xóa bot</button>
+                  <button class="ghost" id="btnExportJson">Xuất JSON</button>
+                </div>
+                <div id="detailInfoGrid" class="compact-list"></div>
+                <div class="footer-note">Điều khiển bot đã khóa ở client và function. Xóa bot sẽ thêm vào ignoredBots để EA gửi lại cũng không tự tạo lại.</div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </main>
+
+      <nav class="bottom-nav">
+        <button class="nav-btn active" data-tab="home"><span class="nav-icon">⌂</span><span>Home</span></button>
+        <button class="nav-btn" data-tab="profit"><span class="nav-icon">◫</span><span>Profit</span></button>
+        <button class="nav-btn" data-tab="bots"><span class="nav-icon">▣</span><span>Bots</span></button>
+        <button class="nav-btn" data-tab="settings"><span class="nav-icon">⚙</span><span>Cài đặt</span></button>
+      </nav>
+    </div>
+  </div>
+
+  <div id="toastStack" class="toast-stack"></div>
+
+  <div id="appModal" class="modal-overlay hide" aria-hidden="true">
+    <div class="modal-card">
+      <div class="modal-head">
+        <h3 id="modalTitle" class="modal-title">Thông báo</h3>
+        <button id="modalClose" class="icon-btn modal-close" aria-label="Đóng">✕</button>
+      </div>
+      <div id="modalBody" class="modal-body"></div>
+      <div id="modalActions" class="modal-actions"></div>
+    </div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getDatabase, ref, onValue, get, set, update, remove } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js';
+
+    const firebaseConfig = {
+      apiKey: 'AIzaSyCujF2OSUSxNfEeEWEBe02EoPZUVB5ZVAs',
+      authDomain: 'cua-caro-token.firebaseapp.com',
+      databaseURL: 'https://cua-caro-token-default-rtdb.asia-southeast1.firebasedatabase.app',
+      projectId: 'cua-caro-token',
+      storageBucket: 'cua-caro-token.appspot.com',
+      messagingSenderId: '468029803156',
+      appId: '1:468029803156:web:d6a8a0e1692690b07b0281',
+      measurementId: 'G-VNS2V6YDF1'
+    };
+
+    const db = getDatabase(initializeApp(firebaseConfig));
+
+    const els = {
+      globalSubtitle: document.getElementById('globalSubtitle'),
+      currentBotBadge: document.getElementById('currentBotBadge'),
+      selectedHero: document.getElementById('selectedHero'),
+      topStats: document.getElementById('topStats'),
+      homeMonthLabel: document.getElementById('homeMonthLabel'),
+      topLeaders: document.getElementById('topLeaders'),
+      filterSummary: document.getElementById('filterSummary'),
+      homeBotList: document.getElementById('homeBotList'),
+      botList: document.getElementById('botList'),
+      botCount: document.getElementById('botCount'),
+      botCountBottom: document.getElementById('botCountBottom'),
+      searchInput: document.getElementById('searchInput'),
+      sortSelect: document.getElementById('sortSelect'),
+      filterSelect: document.getElementById('filterSelect'),
+      btnRefresh: document.getElementById('btnRefresh'),
+      btnToday: document.getElementById('btnToday'),
+      btnPrevMonth: document.getElementById('btnPrevMonth'),
+      btnNextMonth: document.getElementById('btnNextMonth'),
+      monthLabel: document.getElementById('monthLabel'),
+      profitOverview: document.getElementById('profitOverview'),
+      profitMonthSummary: document.getElementById('profitMonthSummary'),
+      calendarHead: document.getElementById('calendarHead'),
+      calendarBody: document.getElementById('calendarBody'),
+      detailEmpty: document.getElementById('detailEmpty'),
+      detailContent: document.getElementById('detailContent'),
+      detailBotTitle: document.getElementById('detailBotTitle'),
+      detailBotMeta: document.getElementById('detailBotMeta'),
+      detailStateDot: document.getElementById('detailStateDot'),
+      detailStateText: document.getElementById('detailStateText'),
+      detailKpis: document.getElementById('detailKpis'),
+      detailMini: document.getElementById('detailMini'),
+      detailInfoGrid: document.getElementById('detailInfoGrid'),
+      controlLocked: document.getElementById('controlLocked'),
+      controlActions: document.getElementById('controlActions'),
+      adminStatePill: document.getElementById('adminStatePill'),
+      btnAdminToggle: document.getElementById('btnAdminToggle'),
+      adminPin: document.getElementById('adminPin'),
+      btnUnlock: document.getElementById('btnUnlock'),
+      btnLock: document.getElementById('btnLock'),
+      adminContent: document.getElementById('adminContent'),
+      editAlias: document.getElementById('editAlias'),
+      editNote: document.getElementById('editNote'),
+      editStartBalance: document.getElementById('editStartBalance'),
+      editRealProfit: document.getElementById('editRealProfit'),
+      editRealPct: document.getElementById('editRealPct'),
+      editDayTotal: document.getElementById('editDayTotal'),
+      editAction: document.getElementById('editAction'),
+      btnSaveOverride: document.getElementById('btnSaveOverride'),
+      btnClearOverride: document.getElementById('btnClearOverride'),
+      btnHideBot: document.getElementById('btnHideBot'),
+      btnDeleteBot: document.getElementById('btnDeleteBot'),
+      btnExportJson: document.getElementById('btnExportJson'),
+      settingsSelectedBot: document.getElementById('settingsSelectedBot'),
+      toastStack: document.getElementById('toastStack'),
+      appModal: document.getElementById('appModal'),
+      modalTitle: document.getElementById('modalTitle'),
+      modalBody: document.getElementById('modalBody'),
+      modalActions: document.getElementById('modalActions'),
+      modalClose: document.getElementById('modalClose'),
+      pages: Array.from(document.querySelectorAll('.page')),
+      navBtns: Array.from(document.querySelectorAll('.nav-btn')),
+    };
+
+    const state = {
+      botsMap: {},
+      bots: [],
+      selectedBotKey: '',
+      selectedMonth: new Date(),
+      adminUnlocked: false,
+      panelToken: '',
+      manualMap: {},
+      ignoredMap: {},
+      fixedOrderMap: JSON.parse(localStorage.getItem('jcfx_fixed_order_map') || '{}'),
+      activeTab: localStorage.getItem('jcfx_active_tab') || 'home',
+      modalActionHandlers: [],
+      lastDataAt: 0,
+      daySnapshots: JSON.parse(localStorage.getItem('jcfx_day_snapshots') || '{}'),
+      monthJsonCache: {},
+      monthJsonLoading: {},
+    };
+
+    const weekdayLabels = ['CN','2','3','4','5','6','7'];
+    els.calendarHead.innerHTML = weekdayLabels.map(d => `<div>${d}</div>`).join('');
+
+    function fmtNum(v, digits = 2) {
+      const n = Number(v || 0);
+      return n.toLocaleString('en-US', { minimumFractionDigits: digits, maximumFractionDigits: digits });
+    }
+    function fmtSigned(v, digits = 2, pct = false) {
+      const n = Number(v || 0);
+      const sign = n > 0 ? '+' : '';
+      return `${sign}${fmtNum(n, digits)}${pct ? '%' : ''}`;
+    }
+    function safe(v, fallback = '-') {
+      return v === undefined || v === null || v === '' ? fallback : v;
+    }
+    function colorClassByValue(n) {
+      n = Number(n || 0);
+      if (n > 0) return 'good';
+      if (n < 0) return 'bad';
+      return 'muted';
+    }
+    function isLive(item) {
+      const updatedTs = Number(item.updatedTs || item.heartbeatAt || 0);
+      return updatedTs > 0 && (Date.now() - updatedTs) <= 10000;
+    }
+    function monthName(date) {
+      return new Intl.DateTimeFormat('vi-VN', { month: 'long', year: 'numeric' }).format(date);
+    }
+
+    function ymd(date) {
+      return `${date.getFullYear()}-${String(date.getMonth()+1).padStart(2,'0')}-${String(date.getDate()).padStart(2,'0')}`;
+    }
+    function monthFileName(date) {
+      return `lich_thang_${date.getFullYear()}_${String(date.getMonth() + 1).padStart(2,'0')}.json`;
+    }
+    function inSelectedMonth(dateKey, date = state.selectedMonth) {
+      const d = new Date(`${dateKey}T00:00:00`);
+      return d.getFullYear() === date.getFullYear() && d.getMonth() === date.getMonth();
+    }
+    async function ensureMonthJson(date = state.selectedMonth) {
+      const file = monthFileName(date);
+      if (state.monthJsonCache[file]) return state.monthJsonCache[file];
+      if (state.monthJsonLoading[file]) return state.monthJsonLoading[file];
+      state.monthJsonLoading[file] = fetch(`/calendar/${encodeURIComponent(file)}`)
+        .then(res => res.json().catch(() => ({})))
+        .then(json => {
+          state.monthJsonCache[file] = json && json.ok ? json : { ok: true, file, bots: {}, meta: {} };
+          delete state.monthJsonLoading[file];
+          renderAll();
+          return state.monthJsonCache[file];
+        })
+        .catch(() => {
+          delete state.monthJsonLoading[file];
+          const fallback = { ok: true, file, bots: {}, meta: {} };
+          state.monthJsonCache[file] = fallback;
+          return fallback;
+        });
+      return state.monthJsonLoading[file];
+    }
+    function getSavedMonthDays(botKey, date = state.selectedMonth) {
+      const file = monthFileName(date);
+      const payload = state.monthJsonCache[file] || {};
+      return payload?.bots?.[botKey]?.days || {};
+    }
+    function mergedMonthDays(bot, date = state.selectedMonth) {
+      const liveDays = bot?.days || {};
+      const savedDays = getSavedMonthDays(bot?.botKey, date);
+      const todayKey = ymd(new Date());
+      const out = {};
+      Object.entries(savedDays).forEach(([key, val]) => {
+        if (!inSelectedMonth(key, date)) return;
+        out[key] = { ...val, __source: 'saved_json' };
+      });
+      Object.entries(liveDays).forEach(([key, val]) => {
+        if (!inSelectedMonth(key, date)) return;
+        if (key >= todayKey || !out[key]) out[key] = { ...(out[key] || {}), ...val, __source: key >= todayKey ? 'live' : (out[key] ? out[key].__source : 'live') };
+      });
+      return out;
+    }
+    function pickFinite(...values) {
+      for (const value of values) {
+        const n = Number(value);
+        if (Number.isFinite(n)) return n;
+      }
+      return null;
+    }
+    function daySnapshotKey(botKey, dateKey) {
+      return `${botKey}__${dateKey}`;
+    }
+    function persistDaySnapshots() {
+      localStorage.setItem('jcfx_day_snapshots', JSON.stringify(state.daySnapshots || {}));
+    }
+    function normalizeDayData(botKey, dateKey, rawItem = {}) {
+      const cache = state.daySnapshots[daySnapshotKey(botKey, dateKey)] || {};
+      const todayKey = ymd(new Date());
+      const isPast = dateKey < todayKey;
+      const startBal = pickFinite(rawItem.dayStartBalance, rawItem.firstBalance, rawItem.startBalance, rawItem.balance, cache.startBal) ?? 0;
+      const endEq = pickFinite(rawItem.stopEquity, rawItem.endEquity, rawItem.finalEquity, rawItem.latestEquity, rawItem.equity, cache.endEq) ?? 0;
+      const lockedProfit = pickFinite(
+        rawItem.actualDayProfitEquity,
+        rawItem.uiFrozenProfit,
+        rawItem.finalProfit,
+        rawItem.frozenProfit,
+        rawItem.dayProfit,
+        rawItem.profit
+      );
+      const lockedPct = pickFinite(
+        rawItem.actualDayPctEquity,
+        rawItem.uiFrozenPct,
+        rawItem.finalPct,
+        rawItem.frozenPct,
+        rawItem.dayPct,
+        rawItem.pct
+      );
+      const cacheProfit = pickFinite(cache.profit);
+      const cachePct = pickFinite(cache.pct);
+      let profit = lockedProfit;
+      if (!Number.isFinite(profit)) {
+        if (isPast && Number.isFinite(cacheProfit)) profit = cacheProfit;
+        else if (Number.isFinite(startBal) && Number.isFinite(endEq)) profit = endEq - startBal;
+      }
+      let pct = lockedPct;
+      if (!Number.isFinite(pct)) {
+        if (isPast && Number.isFinite(cachePct)) pct = cachePct;
+        else if (startBal > 0 && Number.isFinite(profit)) pct = (profit / startBal) * 100;
+      }
+      return {
+        startBal,
+        endEq,
+        profit: Number.isFinite(profit) ? profit : 0,
+        pct: Number.isFinite(pct) ? pct : 0,
+        isPast,
+        hasLockedProfit: Number.isFinite(lockedProfit),
+        hasLockedPct: Number.isFinite(lockedPct),
+      };
+    }
+    function freezeSeenDaySnapshots() {
+      let changed = false;
+      for (const bot of state.bots) {
+        const daysMap = bot?.days || {};
+        for (const [dateKey, rawItem] of Object.entries(daysMap)) {
+          const norm = normalizeDayData(bot.botKey, dateKey, rawItem);
+          const key = daySnapshotKey(bot.botKey, dateKey);
+          const prev = state.daySnapshots[key] || {};
+          const next = {
+            profit: norm.profit,
+            pct: norm.pct,
+            startBal: norm.startBal,
+            endEq: norm.endEq,
+            savedAt: Date.now(),
+          };
+          const shouldUpdate =
+            !Number.isFinite(Number(prev.profit)) ||
+            norm.isPast ||
+            norm.hasLockedProfit ||
+            norm.hasLockedPct;
+          if (!shouldUpdate) continue;
+          if (JSON.stringify(prev) !== JSON.stringify(next)) {
+            state.daySnapshots[key] = next;
+            changed = true;
+          }
+        }
+      }
+      if (changed) persistDaySnapshots();
+    }
+    function timeLabel(ts) {
+      if (!ts) return '--:--:--';
+      return new Intl.DateTimeFormat('vi-VN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }).format(new Date(ts));
+    }
+    function esc(str) {
+      return String(str ?? '').replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    }
+    function showToast(message, type = 'info', title = '') {
+      const toast = document.createElement('div');
+      toast.className = `toast ${type}`;
+      toast.innerHTML = `
+        <div class="toast-dot"></div>
+        <div>
+          <strong>${esc(title || (type === 'success' ? 'Thành công' : type === 'error' ? 'Lỗi' : type === 'warn' ? 'Lưu ý' : 'Thông báo'))}</strong>
+          <span>${esc(message)}</span>
+        </div>
+      `;
+      els.toastStack.appendChild(toast);
+      const close = () => {
+        toast.classList.add('fade-out');
+        setTimeout(() => toast.remove(), 180);
+      };
+      setTimeout(close, 2600);
+      toast.addEventListener('click', close);
+    }
+    function closeModal() {
+      els.appModal.classList.add('hide');
+      els.appModal.setAttribute('aria-hidden', 'true');
+      els.modalBody.innerHTML = '';
+      els.modalActions.innerHTML = '';
+      state.modalActionHandlers = [];
+    }
+    function openModal({ title = 'Thông báo', html = '', actions = [] }) {
+      els.modalTitle.textContent = title;
+      els.modalBody.innerHTML = html;
+      els.modalActions.innerHTML = actions.map((action, idx) => `<button class="${action.className || 'ghost'}" data-modal-action="${idx}">${esc(action.label || 'OK')}</button>`).join('');
+      state.modalActionHandlers = actions.map(action => action.onClick || (() => {}));
+      els.appModal.classList.remove('hide');
+      els.appModal.setAttribute('aria-hidden', 'false');
+      Array.from(els.modalActions.querySelectorAll('[data-modal-action]')).forEach(btn => {
+        btn.addEventListener('click', async () => {
+          const fn = state.modalActionHandlers[Number(btn.dataset.modalAction)];
+          if (fn) await fn();
+        });
+      });
+    }
+    function showConfirm({ title = 'Xác nhận', text = '', confirmText = 'Xác nhận', cancelText = 'Hủy', danger = false }) {
+      return new Promise(resolve => {
+        openModal({
+          title,
+          html: `<div class="modal-text">${esc(text)}</div>`,
+          actions: [
+            { label: cancelText, className: 'ghost', onClick: () => { closeModal(); resolve(false); } },
+            { label: confirmText, className: danger ? 'danger' : 'primary', onClick: () => { closeModal(); resolve(true); } }
+          ]
+        });
+      });
+    }
+    function openBotModal(bot) {
+      if (!bot) return;
+      openModal({
+        title: bot.alias || bot.bot || 'Bot',
+        html: `
+          <div class="modal-kpis">
+            <div class="modal-metric"><div class="label">Balance</div><div class="value">$${fmtNum(bot.balance)}</div></div>
+            <div class="modal-metric"><div class="label">Equity</div><div class="value">$${fmtNum(bot.equity)}</div></div>
+            <div class="modal-metric"><div class="label">Lãi thực</div><div class="value ${colorClassByValue(bot.realProfit)}">$${fmtSigned(bot.realProfit)}</div></div>
+            <div class="modal-metric"><div class="label">Lãi hôm nay</div><div class="value ${colorClassByValue(bot.dayTotal)}">$${fmtSigned(bot.dayTotal)}</div></div>
+          </div>
+          <div class="modal-list">
+            <div class="small-card"><div class="label">Thông tin</div><div class="value">ID ${esc(safe(bot.id))} · ${esc(safe(bot.symbol))} · ${esc(safe(bot.name))}</div></div>
+            <div class="small-card"><div class="label">Trạng thái</div><div class="value">${esc(safe(bot.state))} · ${isLive(bot) ? 'Online' : 'Offline'}</div></div>
+            <div class="small-card"><div class="label">Spread / DD / Orders</div><div class="value">${fmtNum(bot.spread,1)} · ${fmtNum(bot.dd)}% · ${fmtNum(bot.dayOrders,0)}</div></div>
+            <div class="small-card"><div class="label">Status / Action</div><div class="value">${esc(safe(bot.status))} · ${esc(safe(bot.action))}</div></div>
+            <div class="modal-note">Popup này để xem nhanh bot đang chọn mà không phải chuyển tab.</div>
+          </div>
+        `,
+        actions: [
+          { label: 'Đóng', className: 'ghost', onClick: closeModal },
+          { label: 'Mở tab Bots', className: 'primary', onClick: () => { closeModal(); switchTab('bots'); } }
+        ]
+      });
+    }
+    function openDayModal(dateKey, rawItem) {
+      const bot = selectedBot();
+      if (!rawItem || !bot) return;
+      const norm = normalizeDayData(bot.botKey, dateKey, rawItem);
+      const startBal = norm.startBal;
+      const endEq = norm.endEq;
+      const profit = norm.profit;
+      const pct = norm.pct;
+      openModal({
+        title: `Chi tiết ngày ${dateKey}`,
+        html: `
+          <div class="modal-kpis">
+            <div class="modal-metric"><div class="label">Lãi ngày</div><div class="value ${colorClassByValue(profit)}">$${fmtSigned(profit)}</div></div>
+            <div class="modal-metric"><div class="label">% ngày</div><div class="value ${colorClassByValue(pct)}">${fmtSigned(pct, 2, true)}</div></div>
+            <div class="modal-metric"><div class="label">Vốn đầu ngày</div><div class="value">$${fmtNum(startBal)}</div></div>
+            <div class="modal-metric"><div class="label">Equity cuối</div><div class="value">$${fmtNum(endEq)}</div></div>
+          </div>
+          <div class="modal-list">
+            <div class="small-card"><div class="label">Orders</div><div class="value">${fmtNum(rawItem.dayOrders || 0,0)}</div></div>
+            <div class="small-card"><div class="label">Buy / Sell / Lots</div><div class="value">${fmtNum(rawItem.dayBuy || rawItem.buy || 0,0)} / ${fmtNum(rawItem.daySell || rawItem.sell || 0,0)} / ${fmtNum(rawItem.dayLots || rawItem.lots || 0,2)}</div></div>
+            <div class="small-card"><div class="label">Ghi chú</div><div class="value">${esc(safe(rawItem.note || rawItem.status || 'Không có'))}</div></div>
+          </div>
+        `,
+        actions: [{ label: 'Đóng', className: 'primary', onClick: closeModal }]
+      });
+    }
+    function persistFixedOrder() {
+      localStorage.setItem('jcfx_fixed_order_map', JSON.stringify(state.fixedOrderMap || {}));
+    }
+    function ensureFixedOrder(botKeys = []) {
+      let changed = false;
+      let maxOrder = Object.values(state.fixedOrderMap || {}).reduce((m, v) => Math.max(m, Number(v) || 0), 0);
+      botKeys.forEach(botKey => {
+        if (state.fixedOrderMap[botKey] === undefined) {
+          maxOrder += 1;
+          state.fixedOrderMap[botKey] = maxOrder;
+          changed = true;
+        }
+      });
+      if (changed) persistFixedOrder();
+    }
+    function fixedOrderOf(botKey) {
+      const v = Number(state.fixedOrderMap?.[botKey]);
+      return Number.isFinite(v) ? v : Number.MAX_SAFE_INTEGER;
+    }
+    function mergedBot(botKey, payload) {
+      const live = payload?.live || {};
+      const meta = payload?.meta || {};
+      const manual = state.manualMap[botKey] || {};
+      const overrides = manual.liveOverrides || {};
+      const merged = { ...live, ...overrides };
+      merged.botKey = botKey;
+      merged.alias = manual.alias || '';
+      merged.note = manual.note || '';
+      merged.updatedAt = merged.serverTime || meta.updatedAt || '';
+      merged.updatedTs = merged.updatedTs || merged.heartbeatAt || meta.updatedTs || 0;
+      merged.days = payload?.days || {};
+      merged.meta = meta;
+      merged.ignored = !!state.ignoredMap[botKey];
+      return merged;
+    }
+    function selectedBot() {
+      return state.bots.find(b => b.botKey === state.selectedBotKey && !b.ignored) || null;
+    }
+    function persistSelectedBot() {
+      localStorage.setItem('jcfx_selected_bot', state.selectedBotKey || '');
+    }
+    function loadSelectedBot() {
+      state.selectedBotKey = localStorage.getItem('jcfx_selected_bot') || '';
+    }
+    function onlineChip(item) {
+      const live = isLive(item);
+      return `<span class="dot ${live ? 'live' : 'dead'}"></span>${live ? 'Online' : 'Offline'}`;
+    }
+    function filteredBots() {
+      const q = els.searchInput.value.trim().toLowerCase();
+      const mode = els.filterSelect.value;
+      let arr = [...state.bots].filter(b => !b.ignored);
+      if (q) {
+        arr = arr.filter(b =>
+          String(b.id || '').toLowerCase().includes(q) ||
+          String(b.bot || '').toLowerCase().includes(q) ||
+          String(b.symbol || '').toLowerCase().includes(q) ||
+          String(b.name || '').toLowerCase().includes(q) ||
+          String(b.alias || '').toLowerCase().includes(q)
+        );
+      }
+      if (mode === 'live') arr = arr.filter(isLive);
+      if (mode === 'paused') arr = arr.filter(b => !isLive(b) || String(b.state || '').toUpperCase() === 'PAUSED');
+      const sort = els.sortSelect.value;
+      if (sort === 'profit') arr.sort((a,b)=>Number(b.realProfit||0)-Number(a.realProfit||0)||fixedOrderOf(a.botKey)-fixedOrderOf(b.botKey));
+      else if (sort === 'day') arr.sort((a,b)=>Number(b.dayTotal||0)-Number(a.dayTotal||0)||fixedOrderOf(a.botKey)-fixedOrderOf(b.botKey));
+      else if (sort === 'name') arr.sort((a,b)=>String(a.alias||a.bot||'').localeCompare(String(b.alias||b.bot||''),'vi')||fixedOrderOf(a.botKey)-fixedOrderOf(b.botKey));
+      else arr.sort((a,b)=>fixedOrderOf(a.botKey)-fixedOrderOf(b.botKey));
+      return arr;
+    }
+    function refreshSelectionIfMissing() {
+      const items = filteredBots();
+      if (!state.selectedBotKey && items.length) {
+        state.selectedBotKey = items[0].botKey;
+        persistSelectedBot();
+      }
+      if (state.selectedBotKey && !state.bots.some(b => b.botKey === state.selectedBotKey && !b.ignored)) {
+        state.selectedBotKey = items[0]?.botKey || '';
+        persistSelectedBot();
+      }
+    }
+    function activeFilterText() {
+      const map = { all: 'Tất cả bot', live: 'Bot online', paused: 'Bot paused' };
+      return `${map[els.filterSelect.value] || 'Tất cả bot'} · ${els.sortSelect.options[els.sortSelect.selectedIndex]?.text || ''}`;
+    }
+    function currentMonthDayStats(bot) {
+      const daysMap = mergedMonthDays(bot);
+      let profit = 0;
+      let orders = 0;
+      let startBase = 0;
+      Object.entries(daysMap).forEach(([key, item]) => {
+        const norm = normalizeDayData(bot.botKey, key, item);
+        profit += norm.profit;
+        orders += Number(item.dayOrders || 0);
+        if (!startBase && norm.startBal > 0) startBase = norm.startBal;
+      });
+      return { profit, orders, pct: startBase > 0 ? (profit / startBase) * 100 : 0 };
+    }
+
+    function renderHeader() {
+      const total = state.bots.filter(b => !b.ignored).length;
+      const online = state.bots.filter(b => !b.ignored && isLive(b)).length;
+      const brand = document.querySelector('.brand');
+      const existing = document.querySelector('.live-pill');
+      if (existing) existing.remove();
+      const livePill = document.createElement('div');
+      livePill.className = 'live-pill';
+      livePill.innerHTML = `<span class="dot ${online > 0 ? 'live' : 'dead'}"></span><span>${online > 0 ? `${online} bot online` : 'Chưa có bot'}</span>`;
+      brand.after(livePill);
+      const syncText = state.lastDataAt ? ` · Đồng bộ ${timeLabel(state.lastDataAt)}` : '';
+      els.globalSubtitle.innerHTML = `Realtime ${online}/${total} bot · ${activeFilterText()}<span class="sync-note">${syncText}</span>`;
+    }
+
+    function renderTopStats() {
+      const items = state.bots.filter(b => !b.ignored);
+      let online = 0, running = 0, paused = 0, target = 0, monthProfit = 0, monthPctBase = 0;
+      items.forEach(bot => {
+        if (isLive(bot)) online += 1;
+        if (String(bot.state || '').toUpperCase() === 'RUNNING') running += 1;
+        if (String(bot.state || '').toUpperCase() === 'PAUSED') paused += 1;
+        if (String(bot.targetReached || '').toUpperCase() === 'YES') target += 1;
+        const agg = currentMonthDayStats(bot);
+        monthProfit += agg.profit;
+        monthPctBase += agg.pct;
+      });
+      const cards = [
+        ['Tổng bot', items.length, 'muted'],
+        ['Bot online', online, online ? 'good' : 'muted'],
+        ['Đang chạy', running, running ? 'good' : 'muted'],
+        ['Pause tổng', paused, paused ? 'warn' : 'muted'],
+        ['Đủ target', target, target ? 'warn' : 'muted'],
+        ['% tháng', `${fmtNum(monthPctBase)}%`, colorClassByValue(monthPctBase)],
+        ['Lãi tháng', `$${fmtSigned(monthProfit)}`, colorClassByValue(monthProfit)],
+        ['Đang hiển thị', filteredBots().length, 'muted'],
+      ];
+      els.homeMonthLabel.textContent = monthName(state.selectedMonth);
+      els.topStats.innerHTML = cards.map(([label,value,cls]) => `<div class="stat-card"><div class="label">${label}</div><div class="value ${cls}">${value}</div></div>`).join('');
+    }
+
+    function renderTopLeaders() {
+      const leaders = state.bots
+        .filter(b => !b.ignored)
+        .sort((a, b) => Number(b.realProfit || 0) - Number(a.realProfit || 0))
+        .slice(0, 3);
+      els.topLeaders.innerHTML = leaders.length
+        ? leaders.map((item, idx) => `
+            <div class="top-item" data-botkey="${item.botKey}">
+              <div class="top-rank rank-${idx + 1}">${idx + 1}</div>
+              <div class="top-main">
+                <div class="name">${item.alias || item.bot || 'BOT'}</div>
+                <div class="meta">ID ${safe(item.id)} · ${safe(item.symbol)}</div>
+              </div>
+              <div class="top-profit ${colorClassByValue(item.realProfit)}">$${fmtSigned(item.realProfit)}</div>
+            </div>
+          `).join('')
+        : '<div class="empty">Chưa có dữ liệu top bot.</div>';
+      attachBotCardEvents(els.topLeaders, 'bots');
+    }
+
+    function renderSelectedHero() {
+      const bot = selectedBot();
+      els.currentBotBadge.textContent = bot ? (bot.alias || bot.bot || 'BOT') : 'Chưa chọn';
+      els.settingsSelectedBot.textContent = bot ? (bot.alias || bot.bot || '-') : '-';
+      if (!bot) {
+        els.selectedHero.innerHTML = '<div class="empty">Chưa có bot nào để hiển thị.</div>';
+        return;
+      }
+      els.selectedHero.innerHTML = `
+        <div class="row-between">
+          <div>
+            <div class="bot-title">${bot.alias || bot.bot || 'BOT'}</div>
+            <div class="meta">ID <span class="mono">${safe(bot.id)}</span> · ${safe(bot.symbol)} · ${safe(bot.name)}</div>
+          </div>
+          <div class="pill">${onlineChip(bot)}</div>
+        </div>
+        <div class="split2">
+          <div class="metric">
+            <div class="label">Lãi thực</div>
+            <div class="value ${colorClassByValue(bot.realProfit)}">$${fmtSigned(bot.realProfit)}</div>
+            <div class="mini">${fmtSigned(bot.realPct, 2, true)}</div>
+          </div>
+          <div class="metric">
+            <div class="label">Lãi hôm nay</div>
+            <div class="value ${colorClassByValue(bot.dayTotal)}">$${fmtSigned(bot.dayTotal)}</div>
+            <div class="mini">Orders ${fmtNum(bot.dayOrders, 0)} · DD ${fmtNum(bot.dd)}%</div>
+          </div>
+        </div>
+        <div class="meta">${safe(bot.status, 'Chưa có trạng thái')}</div>
+        <div class="hero-actions">
+          <button class="ghost" id="btnOpenBotModal">Xem popup</button>
+          <button class="ghost" id="btnJumpBots">Mở tab Bots</button>
+        </div>
+      `;
+      document.getElementById('btnOpenBotModal')?.addEventListener('click', () => openBotModal(bot));
+      document.getElementById('btnJumpBots')?.addEventListener('click', () => switchTab('bots'));
+    }
+
+    function miniBotHtml(item) {
+      return `
+        <div class="mini-bot ${item.botKey === state.selectedBotKey ? 'active' : ''}" data-botkey="${item.botKey}">
+          <div class="row-between">
+            <div class="name">${item.alias || item.bot || 'BOT'}</div>
+            <div class="pill">${onlineChip(item)}</div>
+          </div>
+          <div class="meta">ID ${safe(item.id)} · ${safe(item.symbol)} · ${safe(item.name)}</div>
+          <div class="mini-stats">
+            <div><div class="tag">Lãi thực</div><strong class="${colorClassByValue(item.realProfit)}">$${fmtSigned(item.realProfit)}</strong></div>
+            <div><div class="tag">Lãi ngày</div><strong class="${colorClassByValue(item.dayTotal)}">$${fmtSigned(item.dayTotal)}</strong></div>
+          </div>
+          <div class="mini-stats" style="margin-top:8px">
+            <div><div class="tag">Equity</div><strong>$${fmtNum(item.equity)}</strong></div>
+            <div><div class="tag">Orders</div><strong>${fmtNum(item.dayOrders,0)}</strong></div>
+          </div>
+        </div>
+      `;
+    }
+    function botRowHtml(item) {
+      return `
+        <div class="bot-row ${item.botKey === state.selectedBotKey ? 'active' : ''}" data-botkey="${item.botKey}">
+          <div>
+            <div class="name">${item.alias || item.bot || 'BOT'}</div>
+            <div class="meta">ID ${safe(item.id)} · ${safe(item.symbol)} · ${safe(item.name)}</div>
+            <div class="line2">
+              <span class="${colorClassByValue(item.realProfit)}">$${fmtSigned(item.realProfit)}</span>
+              <span class="${colorClassByValue(item.dayTotal)}">$${fmtSigned(item.dayTotal)}</span>
+            </div>
+          </div>
+          <div class="pill">${onlineChip(item)}</div>
+        </div>
+      `;
+    }
+    function attachBotCardEvents(root, nextTab = null) {
+      Array.from(root.querySelectorAll('[data-botkey]')).forEach(card => {
+        card.addEventListener('click', () => {
+          state.selectedBotKey = card.dataset.botkey;
+          persistSelectedBot();
+          renderAll();
+          if (nextTab) switchTab(nextTab);
+        });
+      });
+    }
+    function renderBotLists() {
+      const items = filteredBots();
+      els.filterSummary.textContent = activeFilterText();
+      els.botCount.textContent = String(items.length);
+      els.botCountBottom.textContent = String(items.length);
+      els.homeBotList.innerHTML = items.length ? items.map(miniBotHtml).join('') : '<div class="empty">Không có bot nào.</div>'; 
+      els.botList.innerHTML = items.length ? items.map(botRowHtml).join('') : '<div class="empty">Không có bot nào để hiển thị.</div>';
+      attachBotCardEvents(els.homeBotList, 'bots');
+      attachBotCardEvents(els.botList, null);
+    }
+
+    function renderProfitOverview() {
+      ensureMonthJson(state.selectedMonth);
+      const bot = selectedBot();
+      els.monthLabel.textContent = monthName(state.selectedMonth);
+      if (!bot) {
+        els.profitOverview.innerHTML = '<div class="empty" style="grid-column:1/-1;height:100%">Chọn bot ở tab Bots để xem hiệu suất.</div>';
+        els.profitMonthSummary.innerHTML = '';
+        renderCalendar(null);
+        return;
+      }
+      const agg = currentMonthDayStats(bot);
+      const cards = [
+        ['Vốn hiện tại', `$${fmtNum(bot.equity)}`, 'muted'],
+        ['Vốn đầu ngày', `$${fmtNum(bot.dayStartBalance || bot.balance)}`, 'muted'],
+        ['Lãi thực', `$${fmtSigned(bot.realProfit)}`, colorClassByValue(bot.realProfit)],
+        ['% tháng', fmtSigned(agg.pct, 2, true), colorClassByValue(agg.pct)],
+      ];
+      els.profitOverview.innerHTML = cards.map(([label, value, cls]) => `<div class="stat-card"><div class="label">${label}</div><div class="value ${cls}">${value}</div></div>`).join('');
+      els.profitMonthSummary.innerHTML = `
+        <div class="small-card"><div class="label">Lãi tháng</div><div class="value ${colorClassByValue(agg.profit)}">$${fmtSigned(agg.profit)}</div></div>
+        <div class="small-card"><div class="label">Orders tháng</div><div class="value">${fmtNum(agg.orders,0)}</div></div>
+      `;
+      renderCalendar(bot);
+    }
+
+    function renderCalendar(bot) {
+      const first = new Date(state.selectedMonth.getFullYear(), state.selectedMonth.getMonth(), 1);
+      const startDay = first.getDay();
+      const last = new Date(state.selectedMonth.getFullYear(), state.selectedMonth.getMonth() + 1, 0);
+      const totalDays = last.getDate();
+      const nowKey = ymd(new Date());
+      const daysMap = mergedMonthDays(bot);
+      const cells = [];
+      for (let i = 0; i < startDay; i++) cells.push('<div class="day emptyday"></div>');
+      for (let d = 1; d <= totalDays; d++) {
+        const cur = new Date(state.selectedMonth.getFullYear(), state.selectedMonth.getMonth(), d);
+        const key = ymd(cur);
+        const item = daysMap[key];
+        if (!item) {
+          cells.push(`<div class="day ${key === nowKey ? 'today' : ''}"><div class="top"><span class="n">${d}</span></div><div class="p muted">-</div><div class="pct"></div></div>`);
+          continue;
+        }
+        const norm = normalizeDayData(bot.botKey, key, item);
+        const profit = norm.profit;
+        const pct = norm.pct;
+        cells.push(`
+          <div class="day clickable-day ${key === nowKey ? 'today' : ''}" data-date="${key}">
+            <div class="top"><span class="n">${d}</span></div>
+            <div class="p ${colorClassByValue(profit)}">${profit >= 0 ? '+' : ''}${fmtNum(profit, 0)}</div>
+            <div class="pct ${colorClassByValue(pct)}">${pct >= 0 ? '+' : ''}${fmtNum(pct, 1)}%</div>
+          </div>
+        `);
+      }
+      els.calendarBody.innerHTML = cells.join('');
+      Array.from(els.calendarBody.querySelectorAll('[data-date]')).forEach(dayEl => {
+        dayEl.addEventListener('click', () => openDayModal(dayEl.dataset.date, daysMap[dayEl.dataset.date]));
+      });
+    }
+
+    function renderDetail() {
+      const bot = selectedBot();
+      if (!bot) {
+        els.detailEmpty.classList.remove('hide');
+        els.detailContent.classList.add('hide');
+        return;
+      }
+      els.detailEmpty.classList.add('hide');
+      els.detailContent.classList.remove('hide');
+      const live = isLive(bot);
+      els.detailBotTitle.textContent = bot.alias || bot.bot || '-';
+      els.detailBotMeta.textContent = `ID ${safe(bot.id)} · ${safe(bot.symbol)} · ${safe(bot.name)}`;
+      els.detailStateDot.className = `dot ${live ? 'live' : 'dead'}`;
+      els.detailStateText.textContent = live ? 'Online' : 'Offline';
+      const kpis = [
+        ['Balance', `$${fmtNum(bot.balance)}`, 'muted'],
+        ['Equity', `$${fmtNum(bot.equity)}`, 'muted'],
+        ['Lãi thực', `$${fmtSigned(bot.realProfit)}`, colorClassByValue(bot.realProfit)],
+        ['Tổng ngày', `$${fmtSigned(bot.dayTotal)}`, colorClassByValue(bot.dayTotal)],
+      ];
+      els.detailKpis.innerHTML = kpis.map(([label,value,cls]) => `<div class="metric"><div class="label">${label}</div><div class="value ${cls}">${value}</div></div>`).join('');
+      const mini = [
+        ['DD', `${fmtNum(bot.dd)}%`],
+        ['Pairs mở', fmtNum(bot.pairOpen, 0)],
+        ['BUY / SELL', `${fmtNum(bot.buyOpen,0)} / ${fmtNum(bot.sellOpen,0)}`],
+        ['Orders ngày', fmtNum(bot.dayOrders,0)],
+      ];
+      els.detailMini.innerHTML = mini.map(([label, value]) => `<div class="small-card"><div class="label">${label}</div><div class="value">${value}</div></div>`).join('');
+      const info = [
+        ['Trend', `${safe(bot.trend)} · Score ${fmtNum(bot.buyScore,0)}/${fmtNum(bot.sellScore,0)}`],
+        ['Spread / ATR', `${fmtNum(bot.spread,1)} / ${fmtNum(bot.atrPts,1)} pts`],
+        ['State / Reason', `${safe(bot.state)} · ${safe(bot.reason)}`],
+        ['Status / Action', `${safe(bot.status)} · ${safe(bot.action)}`],
+        ['Auto / Target', `${safe(bot.autoTrade)} · ${safe(bot.targetReached)}`],
+        ['Ghi chú admin', safe(bot.note)],
+      ];
+      els.detailInfoGrid.innerHTML = info.map(([label, value]) => `<div class="small-card"><div class="label">${label}</div><div class="value">${value}</div></div>`).join('');
+    }
+
+    function renderAdminState() {
+      els.controlLocked.classList.toggle('hide', !!state.adminUnlocked);
+      els.controlActions.classList.toggle('hide', !state.adminUnlocked);
+      els.adminStatePill.textContent = state.adminUnlocked ? 'Admin đã mở khóa' : 'Chỉ admin';
+      els.btnAdminToggle.textContent = state.adminUnlocked ? '🔓' : '⚙';
+      if (!state.adminUnlocked) els.adminContent.classList.add('hide');
+    }
+    function fillAdminForm() {
+      const bot = selectedBot();
+      const manual = bot ? (state.manualMap[bot.botKey] || {}) : {};
+      const lo = manual.liveOverrides || {};
+      els.editAlias.value = manual.alias || '';
+      els.editNote.value = manual.note || '';
+      els.editStartBalance.value = lo.dayStartBalance ?? '';
+      els.editRealProfit.value = lo.realProfit ?? '';
+      els.editRealPct.value = lo.realPct ?? '';
+      els.editDayTotal.value = lo.dayTotal ?? '';
+      els.editAction.value = lo.action || '';
+    }
+
+    async function saveOverride() {
+      const bot = selectedBot();
+      if (!bot) return showToast('Chưa chọn bot.', 'warn');
+      if (!state.adminUnlocked) return showToast('Chưa mở khóa admin.', 'warn');
+      const liveOverrides = {};
+      if (els.editStartBalance.value !== '') liveOverrides.dayStartBalance = Number(els.editStartBalance.value);
+      if (els.editRealProfit.value !== '') liveOverrides.realProfit = Number(els.editRealProfit.value);
+      if (els.editRealPct.value !== '') liveOverrides.realPct = Number(els.editRealPct.value);
+      if (els.editDayTotal.value !== '') liveOverrides.dayTotal = Number(els.editDayTotal.value);
+      if (els.editAction.value.trim()) liveOverrides.action = els.editAction.value.trim();
+      await update(ref(db, `manual/${bot.botKey}`), {
+        alias: els.editAlias.value.trim(),
+        note: els.editNote.value.trim(),
+        liveOverrides,
+        updatedAt: new Date().toISOString(),
+      });
+      showToast('Đã lưu override.', 'success');
+    }
+    async function clearOverride() {
+      const bot = selectedBot();
+      if (!bot) return showToast('Chưa chọn bot.', 'warn');
+      if (!state.adminUnlocked) return showToast('Chưa mở khóa admin.', 'warn');
+      await remove(ref(db, `manual/${bot.botKey}`));
+      showToast('Đã xóa override.', 'success');
+    }
+    async function hideBot() {
+      const bot = selectedBot();
+      if (!bot) return showToast('Chưa chọn bot.', 'warn');
+      if (!state.adminUnlocked) return showToast('Chưa mở khóa admin.', 'warn');
+      await set(ref(db, `ignoredBots/${bot.botKey}`), true);
+      showToast('Đã ẩn bot.', 'success');
+    }
+    async function deleteBot() {
+      const bot = selectedBot();
+      if (!bot) return showToast('Chưa chọn bot.', 'warn');
+      if (!state.adminUnlocked) return showToast('Chưa mở khóa admin.', 'warn');
+      const ok = await showConfirm({
+        title: 'Xóa bot',
+        text: `Xóa bot ${bot.alias || bot.bot} khỏi Firebase và thêm vào ignoredBots?`,
+        confirmText: 'Xóa bot',
+        cancelText: 'Hủy',
+        danger: true
+      });
+      if (!ok) return;
+      await Promise.all([
+        remove(ref(db, `bots/${bot.botKey}`)),
+        remove(ref(db, `commands/${bot.botKey}`)),
+        remove(ref(db, `manual/${bot.botKey}`)),
+        set(ref(db, `ignoredBots/${bot.botKey}`), true)
+      ]);
+      state.selectedBotKey = '';
+      persistSelectedBot();
+      showToast('Đã xóa bot.', 'success');
+    }
+    async function exportBotJson() {
+      const bot = selectedBot();
+      if (!bot) return showToast('Chưa chọn bot.', 'warn');
+      const snap = await get(ref(db, `bots/${bot.botKey}`));
+      const blob = new Blob([JSON.stringify(snap.val() || {}, null, 2)], { type: 'application/json' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob);
+      a.download = `${bot.botKey}.json`;
+      a.click();
+      URL.revokeObjectURL(a.href);
+      showToast(`Đã xuất JSON cho ${bot.alias || bot.bot}.`, 'success');
+    }
+    async function queueCommand(cmd) {
+      const bot = selectedBot();
+      if (!bot) return showToast('Chưa chọn bot.', 'warn');
+      if (!state.adminUnlocked || !state.panelToken) return showToast('Chỉ admin đã mở khóa mới điều khiển được bot.', 'warn');
+      const res = await fetch('/panel/cmd', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ token: state.panelToken, botKey: bot.botKey, cmd }),
+      });
+      const json = await res.json().catch(() => ({}));
+      if (!res.ok || !json.ok) return showToast(`Gửi lệnh thất bại: ${json.error || res.status}`, 'error');
+      showToast(`Đã gửi lệnh ${cmd} cho bot ${bot.alias || bot.bot}.`, 'success');
+    }
+
+    function switchTab(tab) {
+      state.activeTab = tab;
+      localStorage.setItem('jcfx_active_tab', tab);
+      els.pages.forEach(page => page.classList.toggle('active', page.id === `page-${tab}`));
+      els.navBtns.forEach(btn => btn.classList.toggle('active', btn.dataset.tab === tab));
+    }
+
+    function renderAll() {
+      ensureMonthJson(state.selectedMonth);
+      renderHeader();
+      renderTopStats();
+      renderTopLeaders();
+      renderSelectedHero();
+      renderBotLists();
+      renderProfitOverview();
+      renderDetail();
+      fillAdminForm();
+      renderAdminState();
+    }
+
+    function rebuildBots() {
+      ensureFixedOrder(Object.keys(state.botsMap || {}));
+      state.bots = Object.entries(state.botsMap).map(([botKey, payload]) => mergedBot(botKey, payload));
+      freezeSeenDaySnapshots();
+      refreshSelectionIfMissing();
+      renderAll();
+    }
+
+    function bindEvents() {
+      els.searchInput.addEventListener('input', renderAll);
+      els.sortSelect.addEventListener('change', renderAll);
+      els.filterSelect.addEventListener('change', renderAll);
+      els.btnRefresh.addEventListener('click', () => { renderAll(); showToast('Đã làm mới giao diện.', 'info'); });
+      els.modalClose.addEventListener('click', closeModal);
+      els.appModal.addEventListener('click', (e) => { if (e.target === els.appModal) closeModal(); });
+      els.btnToday.addEventListener('click', () => { state.selectedMonth = new Date(); renderTopStats(); renderProfitOverview(); });
+      els.btnPrevMonth.addEventListener('click', () => { state.selectedMonth = new Date(state.selectedMonth.getFullYear(), state.selectedMonth.getMonth() - 1, 1); renderTopStats(); renderProfitOverview(); });
+      els.btnNextMonth.addEventListener('click', () => { state.selectedMonth = new Date(state.selectedMonth.getFullYear(), state.selectedMonth.getMonth() + 1, 1); renderTopStats(); renderProfitOverview(); });
+      els.btnAdminToggle.addEventListener('click', () => switchTab('settings'));
+      els.btnUnlock.addEventListener('click', async () => {
+        const pin = els.adminPin.value.trim();
+        if (!pin) return showToast('Nhập PIN admin trước.', 'warn');
+        try {
+          const res = await fetch(`/panel/summary?token=${encodeURIComponent(pin)}`);
+          const json = await res.json().catch(() => ({}));
+          if (!res.ok || !json.ok) throw new Error(json.error || 'UNAUTHORIZED');
+          state.adminUnlocked = true;
+          state.panelToken = pin;
+          els.adminContent.classList.remove('hide');
+          renderAdminState();
+          showToast('Admin đã mở khóa.', 'success');
+        } catch (err) {
+          state.adminUnlocked = false;
+          state.panelToken = '';
+          renderAdminState();
+          showToast('PIN admin sai hoặc token chưa hợp lệ.', 'error');
+        }
+      });
+      els.btnLock.addEventListener('click', () => {
+        state.adminUnlocked = false;
+        state.panelToken = '';
+        els.adminContent.classList.add('hide');
+        els.adminPin.value = '';
+        renderAdminState();
+        showToast('Đã khóa lại quyền admin.', 'info');
+      });
+      els.btnSaveOverride.addEventListener('click', saveOverride);
+      els.btnClearOverride.addEventListener('click', clearOverride);
+      els.btnHideBot.addEventListener('click', hideBot);
+      els.btnDeleteBot.addEventListener('click', deleteBot);
+      els.btnExportJson.addEventListener('click', exportBotJson);
+      Array.from(document.querySelectorAll('[data-cmd]')).forEach(btn => btn.addEventListener('click', () => queueCommand(btn.dataset.cmd)));
+      els.navBtns.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
+    }
+
+    function watchFirebase() {
+      onValue(ref(db, 'manual'), snap => { state.manualMap = snap.val() || {}; rebuildBots(); });
+      onValue(ref(db, 'ignoredBots'), snap => { state.ignoredMap = snap.val() || {}; rebuildBots(); });
+      onValue(ref(db, 'bots'), snap => { state.botsMap = snap.val() || {}; state.lastDataAt = Date.now(); rebuildBots(); }, err => {
+        els.globalSubtitle.textContent = err.message;
+      });
+    }
+
+    loadSelectedBot();
+    bindEvents();
+    switchTab(state.activeTab);
+    renderAdminState();
+    watchFirebase();
+  </script>
+</body>
+</html>
+
