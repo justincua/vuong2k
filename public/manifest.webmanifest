@@ -1,0 +1,18 @@
+{
+  "name": "JustinCua Bot Dashboard Pro",
+  "short_name": "JustinCua Bot",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#08111f",
+  "theme_color": "#08111f",
+  "description": "Dashboard Railway + Firebase cho bot EA với alias, pin, detect bot chết, BXH và lịch tháng.",
+  "icons": [
+    {
+      "src": "/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

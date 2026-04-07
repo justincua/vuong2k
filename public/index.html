@@ -199,6 +199,70 @@
       .home-bot-list{grid-template-columns:1fr}
       .day{min-height:66px;padding:7px 6px}
     }
+  
+
+    body::before{content:"";position:fixed;inset:-20%;background:radial-gradient(circle at 15% 15%,rgba(56,128,255,.18),transparent 28%),radial-gradient(circle at 84% 18%,rgba(36,203,139,.12),transparent 22%),radial-gradient(circle at 50% 100%,rgba(111,76,255,.16),transparent 28%);filter:blur(14px);animation:bgFloat 14s ease-in-out infinite alternate;pointer-events:none}
+    @keyframes bgFloat{from{transform:translate3d(0,0,0) scale(1)}to{transform:translate3d(0,-10px,0) scale(1.03)}}
+    .phone{max-width:440px;background:linear-gradient(180deg,rgba(6,13,25,.98),rgba(8,18,35,.98));border-color:rgba(255,255,255,.06);box-shadow:0 30px 70px rgba(0,0,0,.46)}
+    .shell{gap:12px}
+    .topbar,.panel,.bottom-nav,.mini-bot,.bot-row,.stat-card,.metric,.small-card,.day,.top-item,.selected-card{transition:transform .22s ease,box-shadow .22s ease,border-color .22s ease,background .22s ease}
+    .page{opacity:0;transform:translateY(10px) scale(.985);pointer-events:none;position:absolute;inset:0;display:grid}
+    .page.active{opacity:1;transform:translateY(0) scale(1);pointer-events:auto;animation:pageIn .26s ease}
+    @keyframes pageIn{from{opacity:0;transform:translateY(14px) scale(.985)}to{opacity:1;transform:translateY(0) scale(1)}}
+    .viewport{position:relative;overflow:hidden}
+    .topbar{padding:14px 16px;border-radius:28px;background:linear-gradient(180deg,rgba(18,31,58,.9),rgba(9,19,36,.86));backdrop-filter:blur(18px)}
+    .brand h1{font-size:18px;letter-spacing:.08em}
+    .action-btn{min-height:42px;padding:0 14px;border-radius:15px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(255,255,255,.06),rgba(255,255,255,.03));font-size:11px;font-weight:900;letter-spacing:.08em}
+    .action-btn:hover,.mini-bot:hover,.bot-row:hover,.top-item:hover,.day.clickable-day:hover{transform:translateY(-1px);box-shadow:0 10px 24px rgba(0,0,0,.24)}
+    .panel{border-radius:28px;background:linear-gradient(180deg,rgba(14,25,47,.92),rgba(8,16,31,.88));backdrop-filter:blur(16px)}
+    .selected-card{background:linear-gradient(180deg,rgba(22,40,76,.92),rgba(11,21,41,.86));border-color:rgba(88,140,255,.18);box-shadow:inset 0 0 0 1px rgba(82,130,244,.06)}
+    .section-title{letter-spacing:.02em}
+    .segmented{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;padding:4px;border-radius:18px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06)}
+    .seg-btn{padding:9px 11px;border-radius:14px;background:transparent;border:none;font-size:11px;font-weight:800;color:#b7c9e7}
+    .seg-btn.active{background:linear-gradient(180deg,rgba(50,112,255,.9),rgba(29,74,181,.96));color:#fff;box-shadow:0 10px 20px rgba(28,76,188,.28)}
+    .live-pill,.status-chip{display:inline-flex;align-items:center;gap:7px;padding:8px 11px;border-radius:999px;border:1px solid rgba(255,255,255,.07);background:rgba(255,255,255,.04);font-size:11px;font-weight:800}
+    .status-chip.online{background:rgba(28,191,102,.1);border-color:rgba(28,191,102,.22)}
+    .status-chip.stale{background:rgba(255,187,74,.1);border-color:rgba(255,187,74,.22)}
+    .status-chip.dead{background:rgba(255,77,123,.1);border-color:rgba(255,77,123,.22)}
+    .dot.stale{background:var(--warn)}
+    .pill.pin-badge{background:rgba(78,143,255,.1);border-color:rgba(78,143,255,.24);font-size:10px;font-weight:900;letter-spacing:.06em}
+    .mini-bot,.bot-row{border-radius:24px;background:linear-gradient(180deg,rgba(18,33,60,.98),rgba(10,18,33,.98));border-color:rgba(255,255,255,.05);box-shadow:0 12px 26px rgba(0,0,0,.18)}
+    .mini-bot.active,.bot-row.active{border-color:rgba(87,145,255,.5);box-shadow:0 16px 34px rgba(18,80,198,.18)}
+    .mini-stats{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+    .mini-stats > div,.bot-grid > div{padding:10px 9px;border-radius:16px;background:rgba(255,255,255,.03);border:1px solid rgba(255,255,255,.05)}
+    .bot-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;margin-top:9px}
+    .bot-grid .tag{font-size:10px;color:var(--muted)}
+    .bot-grid strong{display:block;margin-top:5px;font-size:13px;line-height:1.1}
+    .bot-flags{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .flag{padding:7px 10px;border-radius:999px;background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.05);font-size:10px;font-weight:800;color:#cfe0fb}
+    .flag.pin{background:rgba(78,143,255,.11);border-color:rgba(78,143,255,.24)}
+    .flag.good{background:rgba(28,191,102,.11);border-color:rgba(28,191,102,.24)}
+    .flag.warn{background:rgba(255,187,74,.11);border-color:rgba(255,187,74,.24)}
+    .flag.bad{background:rgba(255,77,123,.11);border-color:rgba(255,77,123,.24)}
+    .detail-kpis-extended{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+    .detail-mini-extended{grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+    .status-banner{display:grid;gap:8px;padding:12px 13px;border-radius:20px;background:linear-gradient(180deg,rgba(255,255,255,.04),rgba(255,255,255,.02));border:1px solid rgba(255,255,255,.06);font-size:12px;line-height:1.45;color:#d7e7ff}
+    #detailFullGrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+    .status-banner .title{display:flex;justify-content:space-between;gap:10px;align-items:center;font-size:12px;font-weight:900}
+    .status-banner .desc{color:#b8cce8}
+    .calendar-panel,.list-area{background:linear-gradient(180deg,rgba(12,24,46,.96),rgba(8,17,33,.92))}
+    .stat-card .value,.metric .value,.small-card .value,.top-profit{letter-spacing:-.02em}
+    .nav-btn{position:relative;min-height:56px;font-size:11px;font-weight:900;letter-spacing:.04em}
+    .nav-btn::before{content:"";position:absolute;top:10px;left:50%;transform:translateX(-50%);width:28px;height:3px;border-radius:999px;background:transparent;transition:background .2s ease,width .2s ease}
+    .nav-btn.active::before{background:#fff;width:36px}
+    .nav-btn span{transform:translateY(6px)}
+    .top-item{padding:12px 13px;border-radius:22px}
+    .app-loader{position:fixed;inset:0;z-index:120;background:linear-gradient(180deg,rgba(3,8,17,.82),rgba(5,10,20,.92));backdrop-filter:blur(12px);display:grid;place-items:center;transition:opacity .28s ease,visibility .28s ease}
+    .app-loader.hidden{opacity:0;visibility:hidden;pointer-events:none}
+    .loader-card{width:min(360px,calc(100vw - 32px));padding:22px 20px;border-radius:28px;border:1px solid rgba(255,255,255,.08);background:linear-gradient(180deg,rgba(16,31,59,.98),rgba(8,18,35,.98));box-shadow:0 24px 54px rgba(0,0,0,.42)}
+    .loader-dot{width:12px;height:12px;border-radius:50%;background:linear-gradient(180deg,#6ca3ff,#2f7dff);box-shadow:0 0 0 10px rgba(108,163,255,.09),0 0 22px rgba(74,134,255,.38);animation:pulseDot 1.1s ease-in-out infinite}
+    .loader-text{margin-top:16px;font-size:14px;font-weight:800;color:#eaf2ff}
+    .loader-line{height:10px;border-radius:999px;margin-top:14px;background:linear-gradient(90deg,rgba(255,255,255,.08),rgba(255,255,255,.22),rgba(255,255,255,.08));background-size:200% 100%;animation:shimmer 1.25s linear infinite}
+    .loader-line.short{width:72%}
+    @keyframes shimmer{0%{background-position:200% 0}100%{background-position:-200% 0}}
+    @keyframes pulseDot{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(.86);opacity:.82}}
+    @media (max-width:420px){.bot-grid,.mini-stats,.detail-mini-extended,#detailFullGrid{grid-template-columns:repeat(2,minmax(0,1fr))}.segmented{width:100%}.section-head{align-items:flex-start}.topbar{padding:13px 14px}}
+
   </style>
 </head>
 <body>
@@ -210,8 +274,8 @@
           <p id="globalSubtitle">Realtime 0/0 bot · Đang kết nối...</p>
         </div>
         <div class="top-actions">
-          <button class="icon-btn" id="btnRefresh" aria-label="Làm mới">↻</button>
-          <button class="icon-btn" id="btnAdminToggle" aria-label="Admin">⚙</button>
+          <button class="action-btn" id="btnRefresh" aria-label="Làm mới">SYNC</button>
+          <button class="action-btn" id="btnAdminToggle" aria-label="Admin">ADMIN</button>
         </div>
       </header>
 
@@ -237,8 +301,15 @@
 
           <div class="panel compact">
             <div class="section-head" style="margin-bottom:8px">
-              <h2 class="section-title">Top bot</h2>
-              <div class="subtle">Lãi thực cao nhất</div>
+              <div>
+                <h2 class="section-title">BXH bot</h2>
+                <div class="subtle" id="rankMetricHint">Lãi thực cao nhất</div>
+              </div>
+              <div class="segmented" id="rankTabs">
+                <button class="seg-btn active" data-rank="realProfit">Lãi</button>
+                <button class="seg-btn" data-rank="realPct">%</button>
+                <button class="seg-btn" data-rank="dayTotal">Ngày</button>
+              </div>
             </div>
             <div id="topLeaders" class="top-list"></div>
           </div>
@@ -283,13 +354,16 @@
               <select id="sortSelect">
                 <option value="fixed">Giữ thứ tự</option>
                 <option value="profit">Lãi thực</option>
+                <option value="realPct">% lãi thực</option>
                 <option value="day">Lãi ngày</option>
+                <option value="dd">DD thấp nhất</option>
                 <option value="name">Tên bot</option>
               </select>
               <select id="filterSelect">
                 <option value="all">Tất cả</option>
                 <option value="live">Online</option>
                 <option value="paused">Paused</option>
+                <option value="dead">Mất kết nối</option>
               </select>
             </div>
           </div>
@@ -304,8 +378,10 @@
                 </div>
                 <div class="pill"><span id="detailStateDot" class="dot"></span><span id="detailStateText">-</span></div>
               </div>
-              <div id="detailKpis" class="split2"></div>
-              <div id="detailMini" class="split4"></div>
+              <div id="detailKpis" class="split2 detail-kpis-extended"></div>
+              <div id="detailMini" class="split4 detail-mini-extended"></div>
+              <div id="detailBanner" class="status-banner"></div>
+              <div id="detailFullGrid" class="compact-list"></div>
               <div id="controlCard" style="display:grid;gap:8px">
                 <div class="section-head" style="margin-bottom:0">
                   <h2 class="section-title">Điều khiển bot</h2>
@@ -372,6 +448,10 @@
                   <button class="primary" id="btnSaveOverride">Lưu override</button>
                   <button class="ghost" id="btnClearOverride">Xóa override</button>
                 </div>
+                <div class="inline-actions two">
+                  <button class="ghost" id="btnTogglePin">Ghim bot</button>
+                  <button class="ghost" id="btnInstallPwa">Cài app</button>
+                </div>
                 <div class="inline-actions">
                   <button class="warnbtn" id="btnHideBot">Ẩn bot</button>
                   <button class="danger" id="btnDeleteBot">Xóa bot</button>
@@ -386,11 +466,20 @@
       </main>
 
       <nav class="bottom-nav">
-        <button class="nav-btn active" data-tab="home"><span class="nav-icon">⌂</span><span>Home</span></button>
-        <button class="nav-btn" data-tab="profit"><span class="nav-icon">◫</span><span>Profit</span></button>
-        <button class="nav-btn" data-tab="bots"><span class="nav-icon">▣</span><span>Bots</span></button>
-        <button class="nav-btn" data-tab="settings"><span class="nav-icon">⚙</span><span>Cài đặt</span></button>
+        <button class="nav-btn active" data-tab="home"><span>Home</span></button>
+        <button class="nav-btn" data-tab="profit"><span>Profit</span></button>
+        <button class="nav-btn" data-tab="bots"><span>Bots</span></button>
+        <button class="nav-btn" data-tab="settings"><span>Admin</span></button>
       </nav>
+    </div>
+  </div>
+
+  <div id="appLoader" class="app-loader">
+    <div class="loader-card">
+      <div class="loader-dot"></div>
+      <div class="loader-text">Đang đồng bộ bot từ Railway + Firebase...</div>
+      <div class="loader-line"></div>
+      <div class="loader-line short"></div>
     </div>
   </div>
 
@@ -431,6 +520,8 @@
       topStats: document.getElementById('topStats'),
       homeMonthLabel: document.getElementById('homeMonthLabel'),
       topLeaders: document.getElementById('topLeaders'),
+      rankMetricHint: document.getElementById('rankMetricHint'),
+      rankTabs: Array.from(document.querySelectorAll('[data-rank]')),
       filterSummary: document.getElementById('filterSummary'),
       homeBotList: document.getElementById('homeBotList'),
       botList: document.getElementById('botList'),
@@ -456,6 +547,8 @@
       detailStateText: document.getElementById('detailStateText'),
       detailKpis: document.getElementById('detailKpis'),
       detailMini: document.getElementById('detailMini'),
+      detailBanner: document.getElementById('detailBanner'),
+      detailFullGrid: document.getElementById('detailFullGrid'),
       detailInfoGrid: document.getElementById('detailInfoGrid'),
       controlLocked: document.getElementById('controlLocked'),
       controlActions: document.getElementById('controlActions'),
@@ -477,6 +570,8 @@
       btnHideBot: document.getElementById('btnHideBot'),
       btnDeleteBot: document.getElementById('btnDeleteBot'),
       btnExportJson: document.getElementById('btnExportJson'),
+      btnTogglePin: document.getElementById('btnTogglePin'),
+      btnInstallPwa: document.getElementById('btnInstallPwa'),
       settingsSelectedBot: document.getElementById('settingsSelectedBot'),
       toastStack: document.getElementById('toastStack'),
       appModal: document.getElementById('appModal'),
@@ -486,6 +581,7 @@
       modalClose: document.getElementById('modalClose'),
       pages: Array.from(document.querySelectorAll('.page')),
       navBtns: Array.from(document.querySelectorAll('.nav-btn')),
+      appLoader: document.getElementById('appLoader'),
     };
 
     const state = {
@@ -499,11 +595,14 @@
       ignoredMap: {},
       fixedOrderMap: JSON.parse(localStorage.getItem('jcfx_fixed_order_map') || '{}'),
       activeTab: localStorage.getItem('jcfx_active_tab') || 'home',
+      rankMetric: localStorage.getItem('jcfx_rank_metric') || 'realProfit',
       modalActionHandlers: [],
       lastDataAt: 0,
       daySnapshots: JSON.parse(localStorage.getItem('jcfx_day_snapshots') || '{}'),
       monthJsonCache: {},
       monthJsonLoading: {},
+      installPrompt: null,
+      firstSyncDone: false,
     };
 
     const weekdayLabels = ['CN','2','3','4','5','6','7'];
@@ -527,9 +626,31 @@
       if (n < 0) return 'bad';
       return 'muted';
     }
+    function heartbeatAgeSec(item) {
+      const updatedTs = Number(item?.updatedTs || item?.heartbeatAt || 0);
+      if (!updatedTs) return 999999;
+      return Math.max(0, Math.floor((Date.now() - updatedTs) / 1000));
+    }
+    function connectionState(item) {
+      const age = heartbeatAgeSec(item);
+      if (age <= 10) return 'online';
+      if (age <= 30) return 'stale';
+      return 'dead';
+    }
     function isLive(item) {
-      const updatedTs = Number(item.updatedTs || item.heartbeatAt || 0);
-      return updatedTs > 0 && (Date.now() - updatedTs) <= 10000;
+      return connectionState(item) === 'online';
+    }
+    function connectionText(item) {
+      const age = heartbeatAgeSec(item);
+      if (age <= 10) return `Online · ${age}s`;
+      if (age <= 30) return `Chậm nhịp · ${age}s`;
+      if (age < 3600) return `Mất kết nối · ${Math.floor(age / 60)}m`;
+      return `Mất kết nối · ${Math.floor(age / 3600)}h`;
+    }
+    function lastSeenText(item) {
+      const ts = Number(item?.updatedTs || item?.heartbeatAt || 0);
+      if (!ts) return 'Chưa có heartbeat';
+      return `${timeLabel(ts)} · ${connectionText(item)}`;
     }
     function monthName(date) {
       return new Intl.DateTimeFormat('vi-VN', { month: 'long', year: 'numeric' }).format(date);
@@ -731,6 +852,7 @@
     }
     function openBotModal(bot) {
       if (!bot) return;
+      const pairs = fullInfoPairs(bot);
       openModal({
         title: bot.alias || bot.bot || 'Bot',
         html: `
@@ -738,14 +860,11 @@
             <div class="modal-metric"><div class="label">Balance</div><div class="value">$${fmtNum(bot.balance)}</div></div>
             <div class="modal-metric"><div class="label">Equity</div><div class="value">$${fmtNum(bot.equity)}</div></div>
             <div class="modal-metric"><div class="label">Lãi thực</div><div class="value ${colorClassByValue(bot.realProfit)}">$${fmtSigned(bot.realProfit)}</div></div>
-            <div class="modal-metric"><div class="label">Lãi hôm nay</div><div class="value ${colorClassByValue(bot.dayTotal)}">$${fmtSigned(bot.dayTotal)}</div></div>
+            <div class="modal-metric"><div class="label">Tổng ngày</div><div class="value ${colorClassByValue(bot.dayTotal)}">$${fmtSigned(bot.dayTotal)}</div></div>
           </div>
+          <div class="small-card"><div class="label">Kết nối</div><div class="value">${connectionText(bot)} · ${esc(safe(bot.state))} · ${esc(safe(bot.status))}</div></div>
           <div class="modal-list">
-            <div class="small-card"><div class="label">Thông tin</div><div class="value">ID ${esc(safe(bot.id))} · ${esc(safe(bot.symbol))} · ${esc(safe(bot.name))}</div></div>
-            <div class="small-card"><div class="label">Trạng thái</div><div class="value">${esc(safe(bot.state))} · ${isLive(bot) ? 'Online' : 'Offline'}</div></div>
-            <div class="small-card"><div class="label">Spread / DD / Orders</div><div class="value">${fmtNum(bot.spread,1)} · ${fmtNum(bot.dd)}% · ${fmtNum(bot.dayOrders,0)}</div></div>
-            <div class="small-card"><div class="label">Status / Action</div><div class="value">${esc(safe(bot.status))} · ${esc(safe(bot.action))}</div></div>
-            <div class="modal-note">Popup này để xem nhanh bot đang chọn mà không phải chuyển tab.</div>
+            ${pairs.map(([label,value]) => `<div class="small-card"><div class="label">${esc(label)}</div><div class="value">${value}</div></div>`).join('')}
           </div>
         `,
         actions: [
@@ -780,6 +899,67 @@
         actions: [{ label: 'Đóng', className: 'primary', onClick: closeModal }]
       });
     }
+    function pinCompare(a, b) {
+      const ap = a?.pinned ? 1 : 0;
+      const bp = b?.pinned ? 1 : 0;
+      if (ap !== bp) return bp - ap;
+      if (ap && bp) return Number(a.pinOrder || 0) - Number(b.pinOrder || 0);
+      return 0;
+    }
+    function statusFlag(bot) {
+      const c = connectionState(bot);
+      if (c === 'online') return '<span class="flag good">ONLINE</span>';
+      if (c === 'stale') return '<span class="flag warn">CHẬM NHỊP</span>';
+      return '<span class="flag bad">MẤT KẾT NỐI</span>';
+    }
+    function rankMetricMeta() {
+      const map = {
+        realProfit: ['Lãi thực cao nhất', 'realProfit', '$'],
+        realPct: ['% lãi thực cao nhất', 'realPct', '%'],
+        dayTotal: ['Lãi ngày cao nhất', 'dayTotal', '$'],
+      };
+      return map[state.rankMetric] || map.realProfit;
+    }
+    function fullInfoPairs(bot) {
+      return [
+        ['Alias hiển thị', safe(bot.alias || bot.bot)],
+        ['ID / Symbol', `${safe(bot.id)} · ${safe(bot.symbol)}`],
+        ['Tên tài khoản', safe(bot.name)],
+        ['Kết nối', connectionText(bot)],
+        ['Cập nhật cuối', lastSeenText(bot)],
+        ['Balance', `$${fmtNum(bot.balance)}`],
+        ['Equity', `$${fmtNum(bot.equity)}`],
+        ['Vốn đầu ngày', `$${fmtNum(bot.dayStartBalance || bot.balance)}`],
+        ['Lãi thực', `$${fmtSigned(bot.realProfit)}`],
+        ['% lãi thực', fmtSigned(bot.realPct,2,true)],
+        ['Tổng ngày', `$${fmtSigned(bot.dayTotal)}`],
+        ['% ngày', fmtSigned(bot.dayPct,2,true)],
+        ['DD hiện tại', `${fmtNum(bot.dd)}%`],
+        ['Max DD ngày', `${fmtNum(bot.dayMaxDD)}%`],
+        ['Worst EDD', `${fmtNum(bot.dayWorstEDD)}%`],
+        ['Orders ngày', fmtNum(bot.dayOrders,0)],
+        ['Lots ngày', fmtNum(bot.dayLots,2)],
+        ['Volume ngày', fmtNum(bot.dayVolume,2)],
+        ['BUY mở', fmtNum(bot.buyOpen,0)],
+        ['SELL mở', fmtNum(bot.sellOpen,0)],
+        ['Pairs mở', fmtNum(bot.pairOpen,0)],
+        ['Spread', fmtNum(bot.spread,1)],
+        ['ATR pts', fmtNum(bot.atrPts,1)],
+        ['Trend', safe(bot.trend)],
+        ['Buy / Sell Score', `${fmtNum(bot.buyScore,0)} / ${fmtNum(bot.sellScore,0)}`],
+        ['State', safe(bot.state)],
+        ['Reason', safe(bot.reason)],
+        ['Status', safe(bot.status)],
+        ['Action', safe(bot.action)],
+        ['Auto trade', safe(bot.autoTrade)],
+        ['Cooldown', safe(bot.cooldown)],
+        ['Target reached', safe(bot.targetReached)],
+        ['TP USD', fmtNum(bot.tpUSD,2)],
+        ['Hedge ratio', fmtNum(bot.hedgeRatio,2)],
+        ['Admin note', safe(bot.note)],
+        ['Pinned', bot.pinned ? 'Có' : 'Không'],
+      ];
+    }
     function persistFixedOrder() {
       localStorage.setItem('jcfx_fixed_order_map', JSON.stringify(state.fixedOrderMap || {}));
     }
@@ -808,6 +988,8 @@
       merged.botKey = botKey;
       merged.alias = manual.alias || '';
       merged.note = manual.note || '';
+      merged.pinned = !!manual.pinned;
+      merged.pinOrder = Number(manual.pinOrder || 0);
       merged.updatedAt = merged.serverTime || meta.updatedAt || '';
       merged.updatedTs = merged.updatedTs || merged.heartbeatAt || meta.updatedTs || 0;
       merged.days = payload?.days || {};
@@ -825,8 +1007,9 @@
       state.selectedBotKey = localStorage.getItem('jcfx_selected_bot') || '';
     }
     function onlineChip(item) {
-      const live = isLive(item);
-      return `<span class="dot ${live ? 'live' : 'dead'}"></span>${live ? 'Online' : 'Offline'}`;
+      const c = connectionState(item);
+      const dot = c === 'online' ? 'live' : c;
+      return `<span class="status-chip ${c}"><span class="dot ${dot}"></span>${connectionText(item)}</span>`;
     }
     function filteredBots() {
       const q = els.searchInput.value.trim().toLowerCase();
@@ -841,13 +1024,17 @@
           String(b.alias || '').toLowerCase().includes(q)
         );
       }
-      if (mode === 'live') arr = arr.filter(isLive);
-      if (mode === 'paused') arr = arr.filter(b => !isLive(b) || String(b.state || '').toUpperCase() === 'PAUSED');
+      if (mode === 'live') arr = arr.filter(b => connectionState(b) === 'online');
+      if (mode === 'paused') arr = arr.filter(b => String(b.state || '').toUpperCase() === 'PAUSED');
+      if (mode === 'dead') arr = arr.filter(b => connectionState(b) === 'dead');
       const sort = els.sortSelect.value;
-      if (sort === 'profit') arr.sort((a,b)=>Number(b.realProfit||0)-Number(a.realProfit||0)||fixedOrderOf(a.botKey)-fixedOrderOf(b.botKey));
-      else if (sort === 'day') arr.sort((a,b)=>Number(b.dayTotal||0)-Number(a.dayTotal||0)||fixedOrderOf(a.botKey)-fixedOrderOf(b.botKey));
-      else if (sort === 'name') arr.sort((a,b)=>String(a.alias||a.bot||'').localeCompare(String(b.alias||b.bot||''),'vi')||fixedOrderOf(a.botKey)-fixedOrderOf(b.botKey));
-      else arr.sort((a,b)=>fixedOrderOf(a.botKey)-fixedOrderOf(b.botKey));
+      const base = (a, b) => pinCompare(a, b) || fixedOrderOf(a.botKey) - fixedOrderOf(b.botKey);
+      if (sort === 'profit') arr.sort((a,b)=>pinCompare(a,b)||Number(b.realProfit||0)-Number(a.realProfit||0)||fixedOrderOf(a.botKey)-fixedOrderOf(b.botKey));
+      else if (sort === 'realPct') arr.sort((a,b)=>pinCompare(a,b)||Number(b.realPct||0)-Number(a.realPct||0)||fixedOrderOf(a.botKey)-fixedOrderOf(b.botKey));
+      else if (sort === 'day') arr.sort((a,b)=>pinCompare(a,b)||Number(b.dayTotal||0)-Number(a.dayTotal||0)||fixedOrderOf(a.botKey)-fixedOrderOf(b.botKey));
+      else if (sort === 'dd') arr.sort((a,b)=>pinCompare(a,b)||Number(a.dd||0)-Number(b.dd||0)||fixedOrderOf(a.botKey)-fixedOrderOf(b.botKey));
+      else if (sort === 'name') arr.sort((a,b)=>pinCompare(a,b)||String(a.alias||a.bot||'').localeCompare(String(b.alias||b.bot||''),'vi')||fixedOrderOf(a.botKey)-fixedOrderOf(b.botKey));
+      else arr.sort(base);
       return arr;
     }
     function refreshSelectionIfMissing() {
@@ -862,7 +1049,7 @@
       }
     }
     function activeFilterText() {
-      const map = { all: 'Tất cả bot', live: 'Bot online', paused: 'Bot paused' };
+      const map = { all: 'Tất cả bot', live: 'Bot online', paused: 'Bot paused', dead: 'Bot mất kết nối' };
       return `${map[els.filterSelect.value] || 'Tất cả bot'} · ${els.sortSelect.options[els.sortSelect.selectedIndex]?.text || ''}`;
     }
     function currentMonthDayStats(bot) {
@@ -880,14 +1067,16 @@
     }
 
     function renderHeader() {
-      const total = state.bots.filter(b => !b.ignored).length;
-      const online = state.bots.filter(b => !b.ignored && isLive(b)).length;
+      const visible = state.bots.filter(b => !b.ignored);
+      const total = visible.length;
+      const online = visible.filter(b => connectionState(b) === 'online').length;
+      const dead = visible.filter(b => connectionState(b) === 'dead').length;
       const brand = document.querySelector('.brand');
       const existing = document.querySelector('.live-pill');
       if (existing) existing.remove();
       const livePill = document.createElement('div');
       livePill.className = 'live-pill';
-      livePill.innerHTML = `<span class="dot ${online > 0 ? 'live' : 'dead'}"></span><span>${online > 0 ? `${online} bot online` : 'Chưa có bot'}</span>`;
+      livePill.innerHTML = `<span class="dot ${online > 0 ? 'live' : dead > 0 ? 'stale' : 'dead'}"></span><span>${online} online · ${dead} dead</span>`;
       brand.after(livePill);
       const syncText = state.lastDataAt ? ` · Đồng bộ ${timeLabel(state.lastDataAt)}` : '';
       els.globalSubtitle.innerHTML = `Realtime ${online}/${total} bot · ${activeFilterText()}<span class="sync-note">${syncText}</span>`;
@@ -895,12 +1084,16 @@
 
     function renderTopStats() {
       const items = state.bots.filter(b => !b.ignored);
-      let online = 0, running = 0, paused = 0, target = 0, monthProfit = 0, monthPctBase = 0;
+      let online = 0, stale = 0, dead = 0, running = 0, paused = 0, target = 0, monthProfit = 0, monthPctBase = 0, pinned = 0;
       items.forEach(bot => {
-        if (isLive(bot)) online += 1;
+        const c = connectionState(bot);
+        if (c === 'online') online += 1;
+        else if (c === 'stale') stale += 1;
+        else dead += 1;
         if (String(bot.state || '').toUpperCase() === 'RUNNING') running += 1;
         if (String(bot.state || '').toUpperCase() === 'PAUSED') paused += 1;
         if (String(bot.targetReached || '').toUpperCase() === 'YES') target += 1;
+        if (bot.pinned) pinned += 1;
         const agg = currentMonthDayStats(bot);
         monthProfit += agg.profit;
         monthPctBase += agg.pct;
@@ -908,34 +1101,45 @@
       const cards = [
         ['Tổng bot', items.length, 'muted'],
         ['Bot online', online, online ? 'good' : 'muted'],
+        ['Bot chậm nhịp', stale, stale ? 'warn' : 'muted'],
+        ['Bot chết', dead, dead ? 'bad' : 'muted'],
         ['Đang chạy', running, running ? 'good' : 'muted'],
         ['Pause tổng', paused, paused ? 'warn' : 'muted'],
         ['Đủ target', target, target ? 'warn' : 'muted'],
+        ['Bot ghim', pinned, pinned ? 'good' : 'muted'],
         ['% tháng', `${fmtNum(monthPctBase)}%`, colorClassByValue(monthPctBase)],
         ['Lãi tháng', `$${fmtSigned(monthProfit)}`, colorClassByValue(monthProfit)],
         ['Đang hiển thị', filteredBots().length, 'muted'],
+        ['Bộ lọc', els.filterSelect.options[els.filterSelect.selectedIndex]?.text || 'Tất cả', 'muted'],
       ];
       els.homeMonthLabel.textContent = monthName(state.selectedMonth);
       els.topStats.innerHTML = cards.map(([label,value,cls]) => `<div class="stat-card"><div class="label">${label}</div><div class="value ${cls}">${value}</div></div>`).join('');
     }
 
     function renderTopLeaders() {
+      const [hint, metric, suffix] = rankMetricMeta();
+      els.rankMetricHint.textContent = hint;
+      els.rankTabs.forEach(btn => btn.classList.toggle('active', btn.dataset.rank === state.rankMetric));
       const leaders = state.bots
         .filter(b => !b.ignored)
-        .sort((a, b) => Number(b.realProfit || 0) - Number(a.realProfit || 0))
-        .slice(0, 3);
+        .sort((a, b) => pinCompare(a,b) || Number(b[metric] || 0) - Number(a[metric] || 0) || Number(b.realProfit || 0) - Number(a.realProfit || 0))
+        .slice(0, 5);
       els.topLeaders.innerHTML = leaders.length
-        ? leaders.map((item, idx) => `
-            <div class="top-item" data-botkey="${item.botKey}">
-              <div class="top-rank rank-${idx + 1}">${idx + 1}</div>
-              <div class="top-main">
-                <div class="name">${item.alias || item.bot || 'BOT'}</div>
-                <div class="meta">ID ${safe(item.id)} · ${safe(item.symbol)}</div>
+        ? leaders.map((item, idx) => {
+            const metricValue = Number(item[metric] || 0);
+            const valueText = suffix === '%' ? fmtSigned(metricValue, 2, true) : `$${fmtSigned(metricValue)}`;
+            return `
+              <div class="top-item" data-botkey="${item.botKey}">
+                <div class="top-rank rank-${idx + 1}">${idx + 1}</div>
+                <div class="top-main">
+                  <div class="name">${item.alias || item.bot || 'BOT'} ${item.pinned ? '· PIN' : ''}</div>
+                  <div class="meta">ID ${safe(item.id)} · ${safe(item.symbol)} · ${connectionText(item)}</div>
+                </div>
+                <div class="top-profit ${colorClassByValue(metricValue)}">${valueText}</div>
               </div>
-              <div class="top-profit ${colorClassByValue(item.realProfit)}">$${fmtSigned(item.realProfit)}</div>
-            </div>
-          `).join('')
-        : '<div class="empty">Chưa có dữ liệu top bot.</div>';
+            `;
+          }).join('')
+        : '<div class="empty">Chưa có dữ liệu BXH bot.</div>';
       attachBotCardEvents(els.topLeaders, 'bots');
     }
 
@@ -953,13 +1157,19 @@
             <div class="bot-title">${bot.alias || bot.bot || 'BOT'}</div>
             <div class="meta">ID <span class="mono">${safe(bot.id)}</span> · ${safe(bot.symbol)} · ${safe(bot.name)}</div>
           </div>
-          <div class="pill">${onlineChip(bot)}</div>
+          <div>${onlineChip(bot)}</div>
+        </div>
+        <div class="bot-flags">
+          ${bot.pinned ? '<span class="flag pin">PINNED</span>' : ''}
+          ${statusFlag(bot)}
+          <span class="flag ${String(bot.state||'').toUpperCase()==='PAUSED' ? 'warn' : 'good'}">${esc(safe(bot.state,'NO STATE'))}</span>
+          <span class="flag">${esc(safe(bot.trend,'NO TREND'))}</span>
         </div>
         <div class="split2">
           <div class="metric">
             <div class="label">Lãi thực</div>
             <div class="value ${colorClassByValue(bot.realProfit)}">$${fmtSigned(bot.realProfit)}</div>
-            <div class="mini">${fmtSigned(bot.realPct, 2, true)}</div>
+            <div class="mini">${fmtSigned(bot.realPct, 2, true)} · Equity $${fmtNum(bot.equity)}</div>
           </div>
           <div class="metric">
             <div class="label">Lãi hôm nay</div>
@@ -967,9 +1177,15 @@
             <div class="mini">Orders ${fmtNum(bot.dayOrders, 0)} · DD ${fmtNum(bot.dd)}%</div>
           </div>
         </div>
-        <div class="meta">${safe(bot.status, 'Chưa có trạng thái')}</div>
+        <div class="bot-grid">
+          <div><div class="tag">Balance</div><strong>$${fmtNum(bot.balance)}</strong></div>
+          <div><div class="tag">Vốn đầu ngày</div><strong>$${fmtNum(bot.dayStartBalance || bot.balance)}</strong></div>
+          <div><div class="tag">Lots ngày</div><strong>${fmtNum(bot.dayLots,2)}</strong></div>
+          <div><div class="tag">Volume ngày</div><strong>${fmtNum(bot.dayVolume,2)}</strong></div>
+        </div>
+        <div class="meta">${safe(bot.status, 'Chưa có trạng thái')} · ${safe(bot.action, 'Không có action')} · ${lastSeenText(bot)}</div>
         <div class="hero-actions">
-          <button class="ghost" id="btnOpenBotModal">Xem popup</button>
+          <button class="ghost" id="btnOpenBotModal">Xem full info</button>
           <button class="ghost" id="btnJumpBots">Mở tab Bots</button>
         </div>
       `;
@@ -982,17 +1198,25 @@
         <div class="mini-bot ${item.botKey === state.selectedBotKey ? 'active' : ''}" data-botkey="${item.botKey}">
           <div class="row-between">
             <div class="name">${item.alias || item.bot || 'BOT'}</div>
-            <div class="pill">${onlineChip(item)}</div>
+            <div>${onlineChip(item)}</div>
           </div>
           <div class="meta">ID ${safe(item.id)} · ${safe(item.symbol)} · ${safe(item.name)}</div>
-          <div class="mini-stats">
-            <div><div class="tag">Lãi thực</div><strong class="${colorClassByValue(item.realProfit)}">$${fmtSigned(item.realProfit)}</strong></div>
-            <div><div class="tag">Lãi ngày</div><strong class="${colorClassByValue(item.dayTotal)}">$${fmtSigned(item.dayTotal)}</strong></div>
+          <div class="bot-flags">
+            ${item.pinned ? '<span class="flag pin">PIN</span>' : ''}
+            ${statusFlag(item)}
+            <span class="flag ${String(item.state||'').toUpperCase()==='PAUSED' ? 'warn' : 'good'}">${esc(safe(item.state,'NO STATE'))}</span>
           </div>
-          <div class="mini-stats" style="margin-top:8px">
+          <div class="bot-grid">
+            <div><div class="tag">Lãi thực</div><strong class="${colorClassByValue(item.realProfit)}">$${fmtSigned(item.realProfit)}</strong></div>
+            <div><div class="tag">% thực</div><strong class="${colorClassByValue(item.realPct)}">${fmtSigned(item.realPct,2,true)}</strong></div>
+            <div><div class="tag">Lãi ngày</div><strong class="${colorClassByValue(item.dayTotal)}">$${fmtSigned(item.dayTotal)}</strong></div>
+            <div><div class="tag">DD</div><strong>${fmtNum(item.dd)}%</strong></div>
             <div><div class="tag">Equity</div><strong>$${fmtNum(item.equity)}</strong></div>
             <div><div class="tag">Orders</div><strong>${fmtNum(item.dayOrders,0)}</strong></div>
+            <div><div class="tag">Lots</div><strong>${fmtNum(item.dayLots,2)}</strong></div>
+            <div><div class="tag">Open</div><strong>${fmtNum(item.pairOpen,0)}</strong></div>
           </div>
+          <div class="meta" style="margin-top:10px">${safe(item.status,'Chưa có status')} · ${safe(item.action,'Không có action')} · ${lastSeenText(item)}</div>
         </div>
       `;
     }
@@ -1000,14 +1224,28 @@
       return `
         <div class="bot-row ${item.botKey === state.selectedBotKey ? 'active' : ''}" data-botkey="${item.botKey}">
           <div>
-            <div class="name">${item.alias || item.bot || 'BOT'}</div>
-            <div class="meta">ID ${safe(item.id)} · ${safe(item.symbol)} · ${safe(item.name)}</div>
-            <div class="line2">
-              <span class="${colorClassByValue(item.realProfit)}">$${fmtSigned(item.realProfit)}</span>
-              <span class="${colorClassByValue(item.dayTotal)}">$${fmtSigned(item.dayTotal)}</span>
+            <div class="row-between">
+              <div class="name">${item.alias || item.bot || 'BOT'}</div>
+              <div>${onlineChip(item)}</div>
             </div>
+            <div class="meta">ID ${safe(item.id)} · ${safe(item.symbol)} · ${safe(item.name)}</div>
+            <div class="bot-flags">
+              ${item.pinned ? '<span class="flag pin">PINNED</span>' : ''}
+              ${statusFlag(item)}
+              <span class="flag">${esc(safe(item.trend,'NO TREND'))}</span>
+            </div>
+            <div class="bot-grid">
+              <div><div class="tag">Balance</div><strong>$${fmtNum(item.balance)}</strong></div>
+              <div><div class="tag">Equity</div><strong>$${fmtNum(item.equity)}</strong></div>
+              <div><div class="tag">Lãi thực</div><strong class="${colorClassByValue(item.realProfit)}">$${fmtSigned(item.realProfit)}</strong></div>
+              <div><div class="tag">% thực</div><strong class="${colorClassByValue(item.realPct)}">${fmtSigned(item.realPct,2,true)}</strong></div>
+              <div><div class="tag">Ngày</div><strong class="${colorClassByValue(item.dayTotal)}">$${fmtSigned(item.dayTotal)}</strong></div>
+              <div><div class="tag">DD</div><strong>${fmtNum(item.dd)}%</strong></div>
+              <div><div class="tag">Orders</div><strong>${fmtNum(item.dayOrders,0)}</strong></div>
+              <div><div class="tag">Lots / Vol</div><strong>${fmtNum(item.dayLots,2)} / ${fmtNum(item.dayVolume,0)}</strong></div>
+            </div>
+            <div class="meta" style="margin-top:10px">State ${safe(item.state)} · Reason ${safe(item.reason)} · ${lastSeenText(item)}</div>
           </div>
-          <div class="pill">${onlineChip(item)}</div>
         </div>
       `;
     }
@@ -1100,41 +1338,51 @@
       }
       els.detailEmpty.classList.add('hide');
       els.detailContent.classList.remove('hide');
-      const live = isLive(bot);
+      const c = connectionState(bot);
+      const dot = c === 'online' ? 'live' : c;
       els.detailBotTitle.textContent = bot.alias || bot.bot || '-';
-      els.detailBotMeta.textContent = `ID ${safe(bot.id)} · ${safe(bot.symbol)} · ${safe(bot.name)}`;
-      els.detailStateDot.className = `dot ${live ? 'live' : 'dead'}`;
-      els.detailStateText.textContent = live ? 'Online' : 'Offline';
+      els.detailBotMeta.textContent = `ID ${safe(bot.id)} · ${safe(bot.symbol)} · ${safe(bot.name)} · ${bot.pinned ? 'PINNED' : 'UNPINNED'}`;
+      els.detailStateDot.className = `dot ${dot}`;
+      els.detailStateText.textContent = connectionText(bot);
       const kpis = [
         ['Balance', `$${fmtNum(bot.balance)}`, 'muted'],
         ['Equity', `$${fmtNum(bot.equity)}`, 'muted'],
         ['Lãi thực', `$${fmtSigned(bot.realProfit)}`, colorClassByValue(bot.realProfit)],
+        ['% lãi thực', fmtSigned(bot.realPct,2,true), colorClassByValue(bot.realPct)],
         ['Tổng ngày', `$${fmtSigned(bot.dayTotal)}`, colorClassByValue(bot.dayTotal)],
+        ['% ngày', fmtSigned(bot.dayPct,2,true), colorClassByValue(bot.dayPct)],
       ];
       els.detailKpis.innerHTML = kpis.map(([label,value,cls]) => `<div class="metric"><div class="label">${label}</div><div class="value ${cls}">${value}</div></div>`).join('');
       const mini = [
         ['DD', `${fmtNum(bot.dd)}%`],
+        ['Max DD', `${fmtNum(bot.dayMaxDD)}%`],
+        ['Worst EDD', `${fmtNum(bot.dayWorstEDD)}%`],
         ['Pairs mở', fmtNum(bot.pairOpen, 0)],
-        ['BUY / SELL', `${fmtNum(bot.buyOpen,0)} / ${fmtNum(bot.sellOpen,0)}`],
+        ['BUY mở', fmtNum(bot.buyOpen,0)],
+        ['SELL mở', fmtNum(bot.sellOpen,0)],
         ['Orders ngày', fmtNum(bot.dayOrders,0)],
+        ['Lots ngày', fmtNum(bot.dayLots,2)],
       ];
       els.detailMini.innerHTML = mini.map(([label, value]) => `<div class="small-card"><div class="label">${label}</div><div class="value">${value}</div></div>`).join('');
-      const info = [
-        ['Trend', `${safe(bot.trend)} · Score ${fmtNum(bot.buyScore,0)}/${fmtNum(bot.sellScore,0)}`],
-        ['Spread / ATR', `${fmtNum(bot.spread,1)} / ${fmtNum(bot.atrPts,1)} pts`],
-        ['State / Reason', `${safe(bot.state)} · ${safe(bot.reason)}`],
-        ['Status / Action', `${safe(bot.status)} · ${safe(bot.action)}`],
-        ['Auto / Target', `${safe(bot.autoTrade)} · ${safe(bot.targetReached)}`],
-        ['Ghi chú admin', safe(bot.note)],
-      ];
-      els.detailInfoGrid.innerHTML = info.map(([label, value]) => `<div class="small-card"><div class="label">${label}</div><div class="value">${value}</div></div>`).join('');
+      els.detailBanner.innerHTML = `
+        <div class="title">
+          <span>Trạng thái kết nối & bot</span>
+          ${onlineChip(bot)}
+        </div>
+        <div class="desc">State ${esc(safe(bot.state,'NO STATE'))} · Reason ${esc(safe(bot.reason,'NO REASON'))} · Status ${esc(safe(bot.status,'NO STATUS'))} · Action ${esc(safe(bot.action,'NO ACTION'))}</div>
+        <div class="desc">Trend ${esc(safe(bot.trend,'NO TREND'))} · Score ${fmtNum(bot.buyScore,0)}/${fmtNum(bot.sellScore,0)} · Spread ${fmtNum(bot.spread,1)} · ATR ${fmtNum(bot.atrPts,1)} · Last seen ${esc(lastSeenText(bot))}</div>
+      `;
+      const info = fullInfoPairs(bot);
+      const infoHtml = info.map(([label, value]) => `<div class="small-card"><div class="label">${label}</div><div class="value">${value}</div></div>`).join('');
+      els.detailFullGrid.innerHTML = infoHtml;
+      els.detailInfoGrid.innerHTML = infoHtml;
     }
 
     function renderAdminState() {
       els.controlLocked.classList.toggle('hide', !!state.adminUnlocked);
       els.controlActions.classList.toggle('hide', !state.adminUnlocked);
       els.adminStatePill.textContent = state.adminUnlocked ? 'Admin đã mở khóa' : 'Chỉ admin';
-      els.btnAdminToggle.textContent = state.adminUnlocked ? '🔓' : '⚙';
+      els.btnAdminToggle.textContent = state.adminUnlocked ? 'ADMIN ON' : 'ADMIN';
       if (!state.adminUnlocked) els.adminContent.classList.add('hide');
     }
     function fillAdminForm() {
@@ -1148,6 +1396,7 @@
       els.editRealPct.value = lo.realPct ?? '';
       els.editDayTotal.value = lo.dayTotal ?? '';
       els.editAction.value = lo.action || '';
+      if (els.btnTogglePin) els.btnTogglePin.textContent = manual.pinned ? 'Bỏ ghim bot' : 'Ghim bot';
     }
 
     async function saveOverride() {
@@ -1174,6 +1423,31 @@
       if (!state.adminUnlocked) return showToast('Chưa mở khóa admin.', 'warn');
       await remove(ref(db, `manual/${bot.botKey}`));
       showToast('Đã xóa override.', 'success');
+    }
+    async function togglePin() {
+      const bot = selectedBot();
+      if (!bot) return showToast('Chưa chọn bot.', 'warn');
+      if (!state.adminUnlocked) return showToast('Chưa mở khóa admin.', 'warn');
+      const manualRef = ref(db, `manual/${bot.botKey}`);
+      const manual = state.manualMap[bot.botKey] || {};
+      const nextPinned = !manual.pinned;
+      await update(manualRef, {
+        pinned: nextPinned,
+        pinOrder: nextPinned ? (manual.pinOrder || Date.now()) : 0,
+        updatedAt: new Date().toISOString(),
+      });
+      showToast(nextPinned ? 'Đã ghim bot lên đầu danh sách.' : 'Đã bỏ ghim bot.', 'success');
+    }
+    async function installPwa() {
+      if (window.matchMedia('(display-mode: standalone)').matches) return showToast('App đã chạy ở chế độ cài đặt rồi.', 'info');
+      if (state.installPrompt) {
+        state.installPrompt.prompt();
+        const choice = await state.installPrompt.userChoice.catch(() => null);
+        state.installPrompt = null;
+        showToast(choice?.outcome === 'accepted' ? 'Đã gửi yêu cầu cài app.' : 'Bạn đã đóng hộp thoại cài app.', choice?.outcome === 'accepted' ? 'success' : 'info');
+        return;
+      }
+      showToast('Trình duyệt chưa bật popup cài app. Vẫn có thể dùng Add to Home Screen trong menu trình duyệt.', 'warn');
     }
     async function hideBot() {
       const bot = selectedBot();
@@ -1307,19 +1581,30 @@
       });
       els.btnSaveOverride.addEventListener('click', saveOverride);
       els.btnClearOverride.addEventListener('click', clearOverride);
+      els.btnTogglePin?.addEventListener('click', togglePin);
+      els.btnInstallPwa?.addEventListener('click', installPwa);
       els.btnHideBot.addEventListener('click', hideBot);
       els.btnDeleteBot.addEventListener('click', deleteBot);
       els.btnExportJson.addEventListener('click', exportBotJson);
       Array.from(document.querySelectorAll('[data-cmd]')).forEach(btn => btn.addEventListener('click', () => queueCommand(btn.dataset.cmd)));
       els.navBtns.forEach(btn => btn.addEventListener('click', () => switchTab(btn.dataset.tab)));
+      els.rankTabs.forEach(btn => btn.addEventListener('click', () => { state.rankMetric = btn.dataset.rank; localStorage.setItem('jcfx_rank_metric', state.rankMetric); renderTopLeaders(); }));
+      window.addEventListener('beforeinstallprompt', (e) => { e.preventDefault(); state.installPrompt = e; showToast('Đã sẵn sàng cài app PWA.', 'success'); });
       document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeModal(); });
     }
 
     function watchFirebase() {
       onValue(ref(db, 'manual'), snap => { state.manualMap = snap.val() || {}; rebuildBots(); });
       onValue(ref(db, 'ignoredBots'), snap => { state.ignoredMap = snap.val() || {}; rebuildBots(); });
-      onValue(ref(db, 'bots'), snap => { state.botsMap = snap.val() || {}; state.lastDataAt = Date.now(); rebuildBots(); }, err => {
+      onValue(ref(db, 'bots'), snap => { 
+        state.botsMap = snap.val() || {}; 
+        state.lastDataAt = Date.now(); 
+        state.firstSyncDone = true;
+        els.appLoader?.classList.add('hidden');
+        rebuildBots(); 
+      }, err => {
         els.globalSubtitle.textContent = err.message;
+        els.appLoader?.classList.add('hidden');
       });
     }
 
@@ -1327,6 +1612,7 @@
     bindEvents();
     switchTab(state.activeTab);
     renderAdminState();
+    if ('serviceWorker' in navigator) { window.addEventListener('load', () => navigator.serviceWorker.register('/sw.js').catch(() => {})); }
     watchFirebase();
   </script>
 </body>

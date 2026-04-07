@@ -1,46 +1,38 @@
-RAILWAY FULL BUNDLE
-===================
+Railway Firebase Dashboard v9 Pro Mobile PWA
 
-Mục tiêu bản này:
-- Chạy thẳng trên Railway bằng Express.
-- Giữ nguyên API cho EA:
-  /ea/heartbeat
-  /ea/next
-  /ea/ack
-  /panel/summary
-  /panel/cmd
-  /panel/delete-bot
-- Thêm lịch tháng lưu dạng JSON động:
-  /calendar/lich_thang_YYYY_MM.json
+Bản này nâng cấp từ v8, dành cho Railway + Firebase Realtime Database.
+
+Tính năng mới:
+- Alias bot trong admin
+- Pin bot để luôn nổi lên đầu danh sách
+- Detect bot chết / chậm nhịp / online theo heartbeat
+- BXH bot theo: Lãi thực / % lãi thực / Lãi ngày
+- Card bot hiển thị full thông tin hơn: balance, equity, lãi thực, %, lãi ngày, DD, orders, lots, volume, trạng thái, kết nối
+- Chi tiết bot hiển thị full info ngay trong tab Bots
+- Giao diện mobile kiểu app, màu tối chuyên nghiệp, animation nhẹ, chuyển tab mượt
+- PWA: có manifest + service worker + icon, có thể Add to Home Screen
+- Lịch tháng vẫn lưu theo lich_thang_YYYY_MM.json như bản trước
+- Xóa bot qua admin Railway API vẫn giữ nguyên
 
 Biến môi trường Railway:
-- EA_TOKEN=cua
-- PANEL_TOKEN=07072000
-- FIREBASE_DATABASE_URL=https://cua-caro-token-default-rtdb.asia-southeast1.firebasedatabase.app
-- FIREBASE_SERVICE_ACCOUNT_JSON={...service account json một dòng...}
+- EA_TOKEN
+- PANEL_TOKEN
+- FIREBASE_DATABASE_URL
+- FIREBASE_SERVICE_ACCOUNT_JSON
 
-Cách deploy Railway:
-1) Upload cả folder này lên GitHub hoặc kéo thẳng vào Railway.
-2) Railway -> Variables -> thêm 4 biến ở trên.
-3) Deploy.
-4) EA dùng:
-   BridgeURL = "https://YOUR-APP.up.railway.app"
-   BridgeEaToken = "cua"
+Deploy:
+1. Upload toàn bộ folder này lên Railway
+2. Set biến môi trường
+3. Start command: npm start
 
-Kiểm tra nhanh:
-- https://YOUR-APP.up.railway.app/health
-- https://YOUR-APP.up.railway.app/ea/heartbeat?id=1&bot=Demo&symbol=XAUUSDm&ea_token=cua
-- https://YOUR-APP.up.railway.app/panel/summary?token=07072000
-- https://YOUR-APP.up.railway.app/calendar/lich_thang_2026_04.json
+File chính:
+- server.js
+- public/index.html
+- public/manifest.webmanifest
+- public/sw.js
+- public/icon.svg
 
-Ghi chú lịch tháng:
-- JSON tháng được lưu bền vững trong Firebase tại calendarFiles/lich_thang_YYYY_MM
-- Đồng thời server sẽ mirror ra file cache cục bộ nếu Railway còn instance hiện tại.
-- Frontend ưu tiên ngày cũ từ lịch tháng JSON, còn ngày hiện tại vẫn lấy realtime từ bot.
-- Khi bot gửi heartbeat, snapshot ngày hiện tại sẽ tự được cập nhật vào lịch tháng.
-
-
-Admin xóa bot:
-- Trong tab Cài đặt admin, chọn bot rồi bấm "Xóa bot".
-- Web sẽ gọi Railway API /panel/delete-bot thay vì xóa trực tiếp từ client.
-- Server sẽ xóa bots/commands/manual/lastHeartbeat/index tương ứng và thêm botKey vào ignoredBots để bot không tự hiện lại.
+Ghi chú:
+- Bot chết: > 30 giây không có heartbeat
+- Bot chậm nhịp: 11-30 giây
+- Bot online: <= 10 giây
